@@ -1,14 +1,14 @@
-# Dialong Situations
+# Dialog Situations
 
 
 ## API Generic
 
 ### Requests defaults
-platform: [IOS | Android]
-version: [1.0.1]
-user_language: ru - 2 symbols
-user_id: "some random string"- optional
-device_id: "UDID" - generate on device
+platform: [IOS | Android]\
+version: [1.0.1]\
+user_language: ru - 2 symbols\
+user_id: "some random string"- optional\
+device_id: "UDID" - generate on device\s
 
 
 ## Main screen
