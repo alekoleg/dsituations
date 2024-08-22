@@ -14,7 +14,8 @@ async function setup()  {
     // const SERVER_URL = "http://test.reading.alekoleg.com:8080/api/parse"
 
     // prod
-    const SERVER_URL = 'http://127.0.0.1:9090/api/parse'
+    const SERVER_URL = 'http://134.122.95.89:9090/api/parse'
+    // const SERVER_URL = 'http://127.0.0.1:9090/api/parse'
     // serverURL: 'http://reading.alekoleg.com:8080/api/parse' // Don't forget to change to https if needed
 
     // Specify the connection string for your mongodb database
