@@ -23,7 +23,8 @@ function setup() {
         // const DB_HOST = 'mongodb://localhost:27017/reading'
         // const SERVER_URL = "http://test.reading.alekoleg.com:8080/api/parse"
         // prod
-        const SERVER_URL = 'http://127.0.0.1:9090/api/parse';
+        const SERVER_URL = 'http://134.122.95.89:9090/api/parse';
+        // const SERVER_URL = 'http://127.0.0.1:9090/api/parse'
         // serverURL: 'http://reading.alekoleg.com:8080/api/parse' // Don't forget to change to https if needed
         // Specify the connection string for your mongodb database
         // and the location to your Parse cloud code
@@ -31,7 +32,7 @@ function setup() {
             databaseURI: DB_HOST,
             cloud: __dirname + '/cloud.js', // Provide an absolute path
             appId: "dhsuadghdfkjgjw3p1209410sdfvmoi3",
-            masterKey: "djhiu3u808ger9j328ger98g2309k1!", // Keep this key secret!
+            masterKey: "djhiu3u808ger9j328ger98g2309k1", // Keep this key secret!
             fileKey: null,
             serverURL: SERVER_URL, // Don't forget to change to https if needed
             publicServerURL: SERVER_URL,
