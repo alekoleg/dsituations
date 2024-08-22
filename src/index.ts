@@ -24,7 +24,7 @@ async function setup()  {
     databaseURI: DB_HOST,
     cloud: __dirname + '/cloud.js', // Provide an absolute path
     appId: "dhsuadghdfkjgjw3p1209410sdfvmoi3",
-    masterKey: "djhiu3u808ger9j328ger98g2309k1!", // Keep this key secret!
+    masterKey: "djhiu3u808ger9j328ger98g2309k1", // Keep this key secret!
     fileKey: null,
     serverURL: SERVER_URL, // Don't forget to change to https if needed
     publicServerURL: SERVER_URL,
