@@ -28,6 +28,7 @@ async function setup()  {
     // and the location to your Parse cloud code
     const server = new ParseServer({
     databaseURI: DB_HOST,
+    javaScriptKey : process.env.JAVASCRIPT_KEY,
     cloud: __dirname + '/cloud.js', // Provide an absolute path
     appId: process.env.APP_ID,
     masterKey: process.env.MASTER_KEY, // Keep this key secret!
