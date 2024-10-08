@@ -1,35 +1,41 @@
 import express, {Request, Response, Application} from 'express';
 import * as Parse from 'parse/node';
+import * as dotenv from 'dotenv';
+
 var ParseServer = require('parse-server').ParseServer;
 
 
 async function setup()  {
 
+    dotenv.config();
     const app = express();
+    const MONGO_DB = process.env.MONGO_DB;
+    const MONGO_USERNAME = process.env.MONGO_USERNAME;
+    const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 
     // test
-    const DB_HOST = 'mongodb+srv://doadmin:nuf3A1954Pe7da82@dbaas-db-3578739-4bb2362b.mongo.ondigitalocean.com/admin?tls=true&authSource=admin&replicaSet=dbaas-db-3578739'
+    const DB_HOST = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@dbaas-db-3578739-4bb2362b.mongo.ondigitalocean.com/${MONGO_DB}?tls=true&authSource=admin&replicaSet=dbaas-db-3578739`
     // dev 
     // const DB_HOST = 'mongodb://localhost:27017/reading'
     // const SERVER_URL = "http://test.reading.alekoleg.com:8080/api/parse"
 
     // prod
-    const SERVER_URL = 'http://134.122.95.89:9090/api/parse'
+    const SERVER_URL = process.env.SERVER_URL;
     // const SERVER_URL = 'http://127.0.0.1:9090/api/parse'
-    // serverURL: 'http://reading.alekoleg.com:8080/api/parse' // Don't forget to change to https if needed
+
 
     // Specify the connection string for your mongodb database
     // and the location to your Parse cloud code
     const server = new ParseServer({
     databaseURI: DB_HOST,
     cloud: __dirname + '/cloud.js', // Provide an absolute path
-    appId: "dhsuadghdfkjgjw3p1209410sdfvmoi3",
-    masterKey: "djhiu3u808ger9j328ger98g2309k1", // Keep this key secret!
+    appId: process.env.APP_ID,
+    masterKey: process.env.MASTER_KEY, // Keep this key secret!
     fileKey: null,
     serverURL: SERVER_URL, // Don't forget to change to https if needed
     publicServerURL: SERVER_URL,
     // Your apps name. This will appear in the subject and body of the emails that are sent.
-    appName: 'Situations app',
+    appName: 'Dialogs.app',
     expireInactiveSessions: false,
     sessionLength: 10 * 360 * 86400// 10 years
     //   emailAdapter: {
