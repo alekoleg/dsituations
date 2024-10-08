@@ -51,7 +51,7 @@ Response:
     {
         "title" : "Situations"
         "items" : [{
-            "item_id" : "id"
+            "id" : "id"
             "title": "Shopping" 
             "subtitle" : "Buying iPhone" - опиционально
             "total" : 12 -> 12 Диалогов
@@ -91,7 +91,7 @@ Response:
         "text" : "Menu"
         "translation" : "Меню"
     }] 
-    "themes" : [{
+    "items" : [{
         "id" : "id"
         "title": "Ordering burger" 
         "tags" : [Food, Buying],
@@ -135,17 +135,21 @@ Response:
     "dialog" : [
     {
         "id" : "id"
-        "name" : "John Wick"
         "text": "Good evening! Welcome to our restaurant. Can I offer you a menu?" - Формат html и кликали по лексемам TBD
         "audio_link" : "Link на файл .m3u8" - его нужно просто скорпить в плеер и будет аудио. 
-        "image_link" : link
+        "speaker" : {
+            "name" : "John Wick"
+            "image_link" : link
+        }
     },
     { 
         "id" : "id"
-        "name" : "Vasya Pupkin"
         "text": "Sounds delicious! I think I'll take the filet mignon. What about desserts?" - Формат html и кликали по лексемам TBD
         "audio_link" : "Link на файл .m3u8" - его нужно просто скорпить в плеер и будет аудио. 
-        "image_link" : link
+        "speaker" : {
+            "name" : "John Wick"
+            "image_link" : link
+        }
     }
     ]
 }
