@@ -1,2 +1,2 @@
 "use strict";
-require('./cloudAPI/recognitionAPI');
+require("./API/appState");

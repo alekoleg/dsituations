@@ -1,1 +1,1 @@
-require('./cloudAPI/recognitionAPI')
+require("./API/appState")

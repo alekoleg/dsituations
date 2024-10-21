@@ -47,12 +47,7 @@ function setup() {
         const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
         // test
         const DB_HOST = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@dbaas-db-3578739-4bb2362b.mongo.ondigitalocean.com/${MONGO_DB}?tls=true&authSource=admin&replicaSet=dbaas-db-3578739`;
-        // dev 
-        // const DB_HOST = 'mongodb://localhost:27017/reading'
-        // const SERVER_URL = "http://test.reading.alekoleg.com:8080/api/parse"
-        // prod
         const SERVER_URL = process.env.SERVER_URL;
-        // const SERVER_URL = 'http://127.0.0.1:9090/api/parse'
         // Specify the connection string for your mongodb database
         // and the location to your Parse cloud code
         const server = new ParseServer({
