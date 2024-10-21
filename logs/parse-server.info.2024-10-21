@@ -1,7 +1,0 @@
-{"level":"warn","message":"DeprecationWarning: The Parse Server option 'allowClientClassCreation' default will change to 'false' in a future version.","timestamp":"2024-10-21T04:41:27.758Z"}
-{"level":"warn","message":"DeprecationWarning: The Parse Server option 'allowExpiredAuthDataToken' default will change to 'false' in a future version.","timestamp":"2024-10-21T04:41:27.759Z"}
-{"level":"warn","message":"DeprecationWarning: The Parse Server option 'encodeParseObjectInCloudFunction' default will change to 'true' in a future version.","timestamp":"2024-10-21T04:41:27.759Z"}
-{"level":"warn","message":"DeprecationWarning: The Parse Server option 'allowClientClassCreation' default will change to 'false' in a future version.","timestamp":"2024-10-21T04:41:53.436Z"}
-{"level":"warn","message":"DeprecationWarning: The Parse Server option 'allowExpiredAuthDataToken' default will change to 'false' in a future version.","timestamp":"2024-10-21T04:41:53.437Z"}
-{"level":"warn","message":"DeprecationWarning: The Parse Server option 'encodeParseObjectInCloudFunction' default will change to 'true' in a future version.","timestamp":"2024-10-21T04:41:53.437Z"}
-{"functionName":"appState","level":"info","message":"Ran cloud function appState for user undefined with:\n  Input: {}\n  Result: \"Hello, World!\"","params":{},"timestamp":"2024-10-21T04:51:00.587Z"}
