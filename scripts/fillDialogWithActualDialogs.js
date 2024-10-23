@@ -9,7 +9,10 @@ const appId = process.env.APP_ID;
 const serverURL = process.env.SERVER_URL;
 const masterKey = process.env.MASTER_KEY;
 const openaiApiKey = process.env.OPENAI_API_KEY;
-const openAI_Situations_Assistant_ID = "asst_42rI6HEmcMcsX1qteXVsMEil"
+
+const openAI_Situations_Assistant_ID = "asst_NXTKrg5yTLsyE38busubncqP"
+const parseSpeaker1Id = "2B2zENPfFH"
+const parseSpeaker2Id = "QNnMXmx2gr"
 
 console.log('appId:', appId);
 
@@ -25,19 +28,27 @@ Parse.masterKey = masterKey;
 const openai = new OpenAI({apiKey: openaiApiKey});
 
 // Функция для получения Situations
-async function fetchSituations() {
-    const Situation = Parse.Object.extend('Situation');
-    const query = new Parse.Query(Situation);
+async function fetchDialogs() {
+    const Dialog = Parse.Object.extend('Dialog');
+    const query = new Parse.Query(Dialog);
     query.limit(1);  // Установка лимита в 5000
+
+    // поиск спикеров
+    const Speaker = Parse.Object.extend("Speaker");
+    const querySpeaker = new Parse.Query(Speaker);
+    const speaker1 = await querySpeaker.get(parseSpeaker1Id);
+    const speaker2 = await querySpeaker.get(parseSpeaker2Id);
 
     try {
         const results = await query.find({ useMasterKey: true });
 
-        for (const situation of results) {
-            const title = situation.get('title');
-            console.log('Обработка ситуации:', title);
+        for (const dialog of results) {
+            const title = dialog.get('title');
+            const subtitle = dialog.get('subtitle');
             if (title) {
-                await sendTitleToOpenAI(title, situation);
+                await sendTitleToOpenAI(title, subtitle, "a1", "dialog_a1", dialog, speaker1, speaker2);
+                await sendTitleToOpenAI(title, subtitle, "b1", "dialog_b1", dialog, speaker1, speaker2);
+                await sendTitleToOpenAI(title, subtitle, "c1", "dialog_c1", dialog, speaker1, speaker2);
             }
         }
 
@@ -48,18 +59,20 @@ async function fetchSituations() {
 }
 
 // Функция для отправки Title в OpenAI Assistant
-async function sendTitleToOpenAI(title, situation) {
+async function sendTitleToOpenAI(title, subtitle, level, reletionKey, mainDialogObject, speaker1, speaker2) {
     try {
         // Создаем новый поток для разговора
         const thread = await openai.beta.threads.create();
         const threadId = thread.id;
+        const promtMessage = level + "/" + title + "(" + subtitle + ")";
 
+        console.log('Promt:', promtMessage);
         console.log("Thread ID:", threadId);
         const message = await openai.beta.threads.messages.create(
             thread.id,
             {
               role: "user",
-              content: title
+              content: promtMessage
             })
         let run = await openai.beta.threads.runs.createAndPoll(
             thread.id,
@@ -76,20 +89,32 @@ async function sendTitleToOpenAI(title, situation) {
 
         console.log("Message:", message.content[0].text.value); 
         let response = JSON.parse(message.content[0].text.value);
-        let dialogs = response["dialogs"];
+        let dialog = response["dialog"];
 
+        
+        const speechReletion = mainDialogObject.relation(reletionKey);
+        // for with index
+        for (var i = 0; i < dialog.length; i++) {
+            
+            const speechFromDialog = dialog[i];
+            const Speech = Parse.Object.extend("Speech"); 
+            const parseObject = new Speech();
+            
+            
 
-        for (const dialog of dialogs) {
-            console.log("dialog:", dialog);
-            const Dialog = Parse.Object.extend("Dialog"); 
-            const dialogObject = new Dialog();
-            dialogObject.set("title", dialog.title);
-            dialogObject.set("subtitle", dialog.subtitle);
-            dialogObject.set("situation", situation);
-            await dialogObject.save();
+            parseObject.set("text", speechFromDialog.text);
+            parseObject.set("order", i);
+            if (speechFromDialog.speaker === "speaker1") {
+                parseObject.set("speaker", speaker1);
+            } else {
+                parseObject.set("speaker", speaker2);
+            }
+            await parseObject.save();
+
+            speechReletion.add(parseObject);
         }
 
-        await situation.save();
+        await mainDialogObject.save();
         
         } else {
             console.log(run.status);
@@ -101,4 +126,4 @@ async function sendTitleToOpenAI(title, situation) {
 }
 
 // Запуск процесса
-fetchSituations();
+fetchDialogs();
