@@ -1,5 +1,23 @@
 import * as parse from 'parse/node';
 
+import { getPopularSituation } from './popularSituation';
+
+
+Parse.Cloud.define('appState2', async (req: any) => {
+
+    let popularSituation = await getPopularSituation({});
+    
+    
+    let state = {
+        "home_sections": [
+          popularSituation
+        ]
+    }
+
+    return state;
+});
+
+
 Parse.Cloud.define('appState', async (req: any) => {
 
     let mock = await getMock();
