@@ -10,11 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const popularSituation_1 = require("./popularSituation");
+const newDialogs_1 = require("./newDialogs");
 Parse.Cloud.define('appState2', (req) => __awaiter(void 0, void 0, void 0, function* () {
-    let popularSituation = yield (0, popularSituation_1.getPopularSituation)({});
+    let popularSituation = yield (0, popularSituation_1.getPopularSituation)(req.params);
+    let newDialogs = yield (0, newDialogs_1.getNewDituation)(req.params);
     let state = {
         "home_sections": [
-            popularSituation
+            popularSituation,
+            newDialogs
         ]
     };
     return state;

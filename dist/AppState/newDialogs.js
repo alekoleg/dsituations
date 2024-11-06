@@ -32,76 +32,70 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPopularSituation = void 0;
+exports.getNewDituation = void 0;
 const i18n = __importStar(require("i18n"));
-const ActionTypes_1 = require("./constants/ActionTypes");
 const SectionTypes_1 = require("./constants/SectionTypes");
 const ImageTypes_1 = require("./constants/ImageTypes");
-function getPopularSituation(params) {
+function getNewDituation(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        let query = new Parse.Query('Situation');
+        let query = new Parse.Query('Dialog');
         query.limit(5);
         query.descending('updatedAt');
-        const situations = yield query.find();
+        query.include('situation');
+        const objects = yield query.find();
         let items = [];
-        for (let situation of situations) {
-            let relation = situation.relation('dialogs');
-            let count = yield relation.query().count();
+        for (let object of objects) {
+            let situation = object.get('situation');
             items.push({
-                id: situation.id,
+                id: object.id,
+                name: object.get('title'),
+                situation_name: situation.get('title'),
                 image: {
                     type: ImageTypes_1.ImageType.URL,
                     url: "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
                     // url: situation.get('image_link')
                 },
-                name: situation.get('title'),
-                number_of_dialogs: count
+                is_premium: object.get('is_premium')
             });
         }
         return {
-            id: "0",
-            title: i18n.__("AppState_Popular_Situations"),
-            button: {
-                title: i18n.__("AppState_Button_Title_Show_All"),
-                action_type: ActionTypes_1.ActionType.SHOW_POPULAR_SITUATIONS
-            },
+            id: "1",
+            title: i18n.__("AppState_New_Dialogs"),
+            button: null,
             section_type: {
-                type: SectionTypes_1.SectionType.SITUATION_PREVIEWS,
+                type: SectionTypes_1.SectionType.DIALOG_WITH_SECTION_PREVIEWS,
                 items: items
             }
         };
     });
 }
-exports.getPopularSituation = getPopularSituation;
+exports.getNewDituation = getNewDituation;
 // {
-//     "id": "0",
-//     "title": "Popular Situations",
-//     "button": {
-//       "title": "Show all",
-//       "action_type": "showPopularSituations"
-//     },
+//     "id": "1",
+//     "title": "New Dialogues",
+//     "button": null,
 //     "section_type": {
-//       "type": "situation_previews",
+//       "type": "dialog_with_section_previews",
 //       "items": [
 //         {
-//           "id": "rwlfrmelgr",
+//           "id": "fdfg",
+//           "name": "Making a dinner reservation",
+//           "situation_name": "At the Restaurant",
 //           "image": {
 //             "type": "url",
 //             "url": "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
 //           },
-//           "name": "At the Gas Station",
-//           "number_of_dialogs": 5,
-//           "number_of_learnt_dialogs": 1
+//           "is_premium": false
 //         },
 //         {
-//           "id": "geklgjerlkg",
+//           "id": "gdfgdf",
+//           "name": "Booking a hotel room",
+//           "situation_name": "At the Hotel",
 //           "image": {
 //             "type": "url",
 //             "url": "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
 //           },
-//           "name": "At the Airport",
-//           "number_of_dialogs": 3,
-//           "number_of_learnt_dialogs": 2
+//           "is_premium": true
 //         }
 //       ]
 //     }

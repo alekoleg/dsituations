@@ -37,6 +37,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
+const i18n = __importStar(require("i18n"));
 var ParseServer = require('parse-server').ParseServer;
 function setup() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -75,8 +76,14 @@ function setup() {
             //     }
             //   }
         });
+        i18n.configure({
+            locales: ['en'],
+            directory: __dirname + '/../locales',
+            defaultLocale: 'en'
+        });
         yield server.start();
         // Serve the Parse API on the /parse URL prefix
+        app.use(i18n.init);
         app.use('/static', express_1.default.static(__dirname + '/public/'));
         app.use('/api/parse', server.app);
         app.listen(9090, function () {

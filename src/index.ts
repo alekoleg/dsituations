@@ -1,6 +1,7 @@
 import express, {Request, Response, Application} from 'express';
 import * as Parse from 'parse/node';
 import * as dotenv from 'dotenv';
+import * as i18n from 'i18n';
 
 var ParseServer = require('parse-server').ParseServer;
 
@@ -45,9 +46,15 @@ async function setup()  {
     //   }
     });
 
+    i18n.configure({
+        locales: ['en'],
+        directory: __dirname + '/../locales',
+        defaultLocale: 'en'
+    });
     await server.start();
 
     // Serve the Parse API on the /parse URL prefix
+    app.use(i18n.init);
     app.use('/static', express.static(__dirname + '/public/'));
     app.use('/api/parse', server.app);
 

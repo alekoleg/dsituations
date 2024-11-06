@@ -1,6 +1,9 @@
+import * as i18n from 'i18n';
+import { ActionType } from './constants/ActionTypes';
+import { SectionType } from './constants/SectionTypes';
+import { ImageType } from './constants/ImageTypes';
 
 export async function getPopularSituation(params: any): Promise<any> {
-
 
     let query = new Parse.Query('Situation');
     query.limit(5);
@@ -14,7 +17,7 @@ export async function getPopularSituation(params: any): Promise<any> {
         items.push({
             id: situation.id,
             image: {
-                type: "url",
+                type: ImageType.URL,
                 url: "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
                 // url: situation.get('image_link')
             },
@@ -22,16 +25,16 @@ export async function getPopularSituation(params: any): Promise<any> {
             number_of_dialogs: count
         });
     }
-
+ 
     return {
         id: "0",
-        title: "Popular Situations",
+        title: i18n.__("AppState_Popular_Situations"),
         button: {
-            title: "Show all",
-            action_type: "showPopularSituations"
+            title: i18n.__("AppState_Button_Title_Show_All"),
+            action_type: ActionType.SHOW_POPULAR_SITUATIONS
         },
         section_type: {
-            type: "situation_previews",
+            type: SectionType.SITUATION_PREVIEWS,
             items: items
         }
     }
