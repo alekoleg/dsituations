@@ -2,17 +2,19 @@ import * as parse from 'parse/node';
 
 import { getPopularSituation } from './popularSituation';
 import { getNewDituation } from './newDialogs';
-
+import { getAllTopics } from './topicsSection';
 
 Parse.Cloud.define('appState2', async (req: any) => {
 
     let popularSituation = await getPopularSituation(req.params);
     let newDialogs = await getNewDituation(req.params);
+    let topics = await getAllTopics(req.params);
     
     let state = {
         "home_sections": [
           popularSituation,
-          newDialogs
+          newDialogs,
+          topics
         ]
     }
 
