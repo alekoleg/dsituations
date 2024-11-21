@@ -3,7 +3,7 @@ import { ImageType } from '../Common/ImageTypes';
 import { SituationPreviewModel } from '../Models/SituationPreview';
 import { TopicModel } from '../Models/Topic';
 
-Parse.Cloud.define('topicsById', async (req: any) => {
+Parse.Cloud.define('topicById', async (req: any) => {
 
     const topicId = req.params.id;
     if (!topicId) {
