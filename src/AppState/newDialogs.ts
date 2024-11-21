@@ -1,6 +1,6 @@
 import * as i18n from 'i18n';
-import { SectionType } from './constants/SectionTypes';
-import { ImageType } from './constants/ImageTypes';
+import { SectionType } from '../Common/SectionTypes';
+import { ImageType } from '../Common/ImageTypes';
 
 export async function getNewDituation(params: any): Promise<any> {
 

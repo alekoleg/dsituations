@@ -1,7 +1,8 @@
 import * as i18n from 'i18n';
-import { ActionType } from './constants/ActionTypes';
-import { SectionType } from './constants/SectionTypes';
-import { ImageType } from './constants/ImageTypes';
+import { ActionType } from '../Common/ActionTypes';
+import { SectionType } from '../Common/SectionTypes';
+import { ImageType } from '../Common/ImageTypes';
+import { SituationPreviewModel } from '../Models/SituationPreview';
 
 export async function getPopularSituation(params: any): Promise<any> {
 
@@ -10,21 +11,9 @@ export async function getPopularSituation(params: any): Promise<any> {
     query.descending('updatedAt');
     const situations = await query.find();
 
-    let items = [];
-    for (let situation of situations) {
-        let relation = situation.relation('dialogs');
-        let count = await relation.query().count();
-        items.push({
-            id: situation.id,
-            image: {
-                type: ImageType.URL,
-                url: "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
-                // url: situation.get('image_link')
-            },
-            name: situation.get('title'),
-            number_of_dialogs: count
-        });
-    }
+    const items = await Promise.all(
+        situations.map(situation => SituationPreviewModel.fromParse(situation))
+    );
  
     return {
         id: "0",
@@ -35,7 +24,7 @@ export async function getPopularSituation(params: any): Promise<any> {
         },
         section_type: {
             type: SectionType.SITUATION_PREVIEWS,
-            items: items
+            items: items.map(item => item.toJSON())
         }
     }
 }

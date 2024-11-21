@@ -34,30 +34,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPopularSituation = void 0;
 const i18n = __importStar(require("i18n"));
-const ActionTypes_1 = require("./constants/ActionTypes");
-const SectionTypes_1 = require("./constants/SectionTypes");
-const ImageTypes_1 = require("./constants/ImageTypes");
+const ActionTypes_1 = require("../Common/ActionTypes");
+const SectionTypes_1 = require("../Common/SectionTypes");
+const SituationPreview_1 = require("../Models/SituationPreview");
 function getPopularSituation(params) {
     return __awaiter(this, void 0, void 0, function* () {
         let query = new Parse.Query('Situation');
         query.limit(5);
         query.descending('updatedAt');
         const situations = yield query.find();
-        let items = [];
-        for (let situation of situations) {
-            let relation = situation.relation('dialogs');
-            let count = yield relation.query().count();
-            items.push({
-                id: situation.id,
-                image: {
-                    type: ImageTypes_1.ImageType.URL,
-                    url: "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
-                    // url: situation.get('image_link')
-                },
-                name: situation.get('title'),
-                number_of_dialogs: count
-            });
-        }
+        const items = yield Promise.all(situations.map(situation => SituationPreview_1.SituationPreviewModel.fromParse(situation)));
         return {
             id: "0",
             title: i18n.__("AppState_Popular_Situations"),
@@ -67,7 +53,7 @@ function getPopularSituation(params) {
             },
             section_type: {
                 type: SectionTypes_1.SectionType.SITUATION_PREVIEWS,
-                items: items
+                items: items.map(item => item.toJSON())
             }
         };
     });

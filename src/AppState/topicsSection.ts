@@ -1,7 +1,7 @@
 import * as i18n from 'i18n';
-import { ActionType } from './constants/ActionTypes';
-import { SectionType } from './constants/SectionTypes';
-import { ImageType } from './constants/ImageTypes';
+import { ActionType } from '../Common/ActionTypes';
+import { SectionType } from '../Common/SectionTypes';
+import { ImageType } from '../Common/ImageTypes';
 
 export async function getAllTopics(params: any): Promise<any> {
 

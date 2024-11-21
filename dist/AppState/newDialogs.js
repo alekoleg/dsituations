@@ -34,8 +34,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getNewDituation = void 0;
 const i18n = __importStar(require("i18n"));
-const SectionTypes_1 = require("./constants/SectionTypes");
-const ImageTypes_1 = require("./constants/ImageTypes");
+const SectionTypes_1 = require("../Common/SectionTypes");
+const ImageTypes_1 = require("../Common/ImageTypes");
 function getNewDituation(params) {
     return __awaiter(this, void 0, void 0, function* () {
         let query = new Parse.Query('Dialog');
