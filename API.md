@@ -222,3 +222,78 @@
 - Максимальное количество возвращаемых диалогов: 1000
 - При отсутствии ситуации с указанным идентификатором будет возвращена ошибка
 - Поле `audio_url` может быть null, если аудио не загружено
+
+## Эндпоинт: `dialogById`
+ - тестовый id пока {"id":"r1VZQRcvQz"}
+
+### Описание
+Возвращает детальную информацию о конкретном диалоге по его идентификатору, включая все реплики участников диалога.
+
+### Параметры запроса
+| Параметр | Тип    | Обязательный | Описание                         |
+|----------|--------|--------------|----------------------------------|
+| id       | string | Да           | Идентификатор диалога           |
+| level    | string | Нет          | Уровень сложности диалога. Возможные значения: "a", "b", "c". По умолчанию: "b" |
+
+### Формат ответа
+{
+    id: string;
+    title: string;
+    subtitle: string;
+    image: {
+        type: "url";
+        url: string;
+    };
+    is_learnt: boolean;
+    premium: boolean;
+    lines: Array<{
+        author: string;
+        avatar: {
+            type: "url";
+            url: string;
+        };
+        text: string;
+        voice_over: {
+            type: "mp3";
+            url: string;
+        };
+        style: "gray" | "blue";
+    }>;
+}
+
+### Пример ответа
+```json
+{
+    "id": "r1VZQRcvQz",
+    "title": "Forgetting List",
+    "subtitle": "Realizing you left the grocery list at home.",
+    "image": {
+        "type": "url",
+        "url": "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
+    },
+    "is_learnt": false,
+    "premium": true,
+    "lines": [
+        {
+            "author": "Taras",
+            "avatar": {
+                "type": "url",
+                "url": "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-980x653.jpg"
+            },
+            "text": "Oh no, I just realized I left the grocery list at home.",
+            "voice_over": {
+                "type": "mp3",
+                "url": "https://readingstorage.fra1.digitaloceanspaces.com/test/BRyHiBsK05.mp3"
+            },
+            "style": "gray"
+        }
+    ]
+}
+```
+
+### Примечания
+- Реплики диалога (`lines`) возвращаются в порядке их следования (сортировка по полю `order`)
+- Стиль реплики (`style`) определяется относительно первого говорящего: первый говорящий получает "gray", остальные "blue"
+- Если для диалога или аватара говорящего не указана ссылка на изображение, будет использовано изображение по умолчанию
+- Все аудио файлы возвращаются в формате MP3
+- При отсутствии диалога с указанным идентификатором будет возвращена ошибка
