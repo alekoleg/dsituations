@@ -159,3 +159,66 @@
 - Для темы загружаются все связанные ситуации через relation 'situations'
 - `number_of_dialogs` показывает количество диалогов в ситуации (по умолчанию: 0)
 - При отсутствии темы с указанным идентификатором будет возвращена ошибка
+
+## Эндпоинт: `situationById`
+
+### Описание
+Возвращает детальную информацию о конкретной ситуации (situation) по её идентификатору, включая все связанные диалоги.
+
+### Параметры запроса
+| Параметр | Тип    | Обязательный | Описание                    |
+|----------|--------|--------------|----------------------------|
+| id       | string | Да           | Идентификатор ситуации     |
+
+### Формат ответа
+{
+    id: string;
+    image: {
+        type: "URL";
+        url: string;
+    };
+    name: string;
+    subtitle: string | null;
+    number_of_dialogs: number;
+    dialogs: Array<{
+        id: string;
+        text: string;
+        translation: string;
+        audio_url: string | null;
+    }>;
+}
+
+### Пример ответа
+```json
+{
+    "id": "situation123",
+    "image": {
+        "type": "URL",
+        "url": "https://example.com/situation-image.jpg"
+    },
+    "name": "Название ситуации",
+    "subtitle": "Подзаголовок ситуации",
+    "number_of_dialogs": 2,
+    "dialogs": [
+        {
+            "id": "dialog1",
+            "text": "Hello, how are you?",
+            "translation": "Привет, как дела?",
+            "audio_url": "https://example.com/audio1.mp3"
+        },
+        {
+            "id": "dialog2",
+            "text": "I'm fine, thank you!",
+            "translation": "Я в порядке, спасибо!",
+            "audio_url": "https://example.com/audio2.mp3"
+        }
+    ]
+}
+```
+
+### Примечания
+- Если для ситуации не указана ссылка на изображение (`image_link`), будет использовано изображение по умолчанию: `https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg`
+- Диалоги возвращаются в порядке их создания (сортировка по `createdAt`)
+- Максимальное количество возвращаемых диалогов: 1000
+- При отсутствии ситуации с указанным идентификатором будет возвращена ошибка
+- Поле `audio_url` может быть null, если аудио не загружено

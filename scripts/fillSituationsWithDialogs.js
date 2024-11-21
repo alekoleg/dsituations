@@ -77,7 +77,7 @@ async function sendTitleToOpenAI(title, situation) {
         console.log("Message:", message.content[0].text.value); 
         let response = JSON.parse(message.content[0].text.value);
         let dialogs = response["dialogs"];
-
+        let relation = situation.relation("dialogs");
 
         for (const dialog of dialogs) {
             console.log("dialog:", dialog);
@@ -87,6 +87,7 @@ async function sendTitleToOpenAI(title, situation) {
             dialogObject.set("subtitle", dialog.subtitle);
             dialogObject.set("situation", situation);
             await dialogObject.save();
+            relation.add(dialogObject);
         }
 
         await situation.save();
