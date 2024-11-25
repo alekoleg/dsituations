@@ -15,9 +15,18 @@ Parse.Cloud.define('topicsAll', async (req: any) => {
 
     let items = [];
     for (let topic of topics) {
-        var results = await topic.relation('situations').query().find();
+        
+        const previewCount = 5;
+        const situationQuery = await topic.relation('situations').query()
+        situationQuery.limit(previewCount + 1);
+        const results = await situationQuery.find();
+        let trimmedResults = results;
+        if (results.length >= previewCount) {
+            trimmedResults = results.slice(0, previewCount);
+        }
+
         var situations_previews = await Promise.all(
-            results.map(situation => SituationPreviewModel.fromParse(situation))
+            trimmedResults.map(situation => SituationPreviewModel.fromParse(situation))
         );
         
         items.push({
@@ -27,7 +36,8 @@ Parse.Cloud.define('topicsAll', async (req: any) => {
                 url: topic.get("image_link") || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
             },
             name: topic.get('title'),
-            situations_previews: situations_previews.map(situation => situation.toJSON())
+            situations_previews: situations_previews.map(situation => situation.toJSON()),
+            has_more: results.length > previewCount
         });
     }
  

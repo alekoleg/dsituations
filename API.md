@@ -34,6 +34,7 @@
             name: string;
             number_of_dialogs: number;
         }>;
+        has_more: boolean;
     }>;
     offset: number; // Следующее смещение для пагинации
 }
@@ -69,7 +70,8 @@
                     "name": "Другая ситуация",
                     "number_of_dialogs": 3
                 }
-            ]
+            ],
+            "has_more": true
         },
         {
             "id": "topic456",
@@ -88,7 +90,8 @@
                     "name": "Третья ситуация",
                     "number_of_dialogs": 2
                 }
-            ]
+            ],
+            "has_more": false
         }
     ],
     "offset": 20
@@ -100,6 +103,7 @@
 - Для каждой темы загружаются все связанные ситуации через relation 'situations'
 - `number_of_dialogs` показывает количество диалогов в ситуации (по умолчанию: 0)
 - Ответ включает смещение для следующей страницы (`offset + topics.length`)
+- Поле `has_more` указывает, есть ли дополнительные ситуации для данной темы (true, если количество ситуаций превышает 5)
 
 
 ## Эндпоинт: `topicById`
@@ -217,7 +221,7 @@
 ```
 
 ### Примечания
-- Если для ситуации не указана ссылка на изображение (`image_link`), будет использовано изображение по умолчанию: `https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg`
+- Если для ситуации не указана ссылка н изображение (`image_link`), будет использовано изображение по умолчанию: `https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg`
 - Диалоги возвращаются в порядке их создания (сортировка по `createdAt`)
 - Максимальное количество возвращаемых диалогов: 1000
 - При отсутствии ситуации с указанным идентификатором будет возвращена ошибка
@@ -256,6 +260,7 @@
         voice_over: {
             type: "mp3";
             url: string;
+            timestamps: string;
         };
         style: "gray" | "blue";
     }>;
@@ -283,7 +288,8 @@
             "text": "Oh no, I just realized I left the grocery list at home.",
             "voice_over": {
                 "type": "mp3",
-                "url": "https://readingstorage.fra1.digitaloceanspaces.com/test/BRyHiBsK05.mp3"
+                "url": "https://readingstorage.fra1.digitaloceanspaces.com/test/BRyHiBsK05.mp3",
+                "timestamps": "https://readingstorage.fra1.digitaloceanspaces.com/test/BRyHiBsK05_timestamps.json"
             },
             "style": "gray"
         }
@@ -297,3 +303,4 @@
 - Если для диалога или аватара говорящего не указана ссылка на изображение, будет использовано изображение по умолчанию
 - Все аудио файлы возвращаются в формате MP3
 - При отсутствии диалога с указанным идентификатором будет возвращена ошибка
+- Поле `timestamps` в `voice_over` содержит ссылку на JSON-файл с временными метками для синхронизации текста и аудио

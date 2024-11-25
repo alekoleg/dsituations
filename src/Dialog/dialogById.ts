@@ -41,7 +41,8 @@ Parse.Cloud.define('dialogById', async (req: any) => {
         let style = speaker.id == initialSpeakerId ? "gray" : "blue";
         let voice = {
             type : AudioType.MP3,
-            url : generateAudioPath(speaker)
+            url : generateAudioPath(speech),
+            timestamps : generateAudioTimestampsPath(speech)
         }
         lines.push({
             author: author,
@@ -59,10 +60,20 @@ Parse.Cloud.define('dialogById', async (req: any) => {
 });
 
 
-function generateAudioPath(speaker: Parse.Object): string {
-    return "https://readingstorage.fra1.digitaloceanspaces.com/test/BRyHiBsK05.mp3";
+function generateAudioPath(speech: Parse.Object): string {
 
-    // const finalPath = `https://readingstorage.fra1.digitaloceanspaces.com/test/${speaker.id}.mp3`;
-    // return finalPath;
+    let url = process.env.DIGITALOCEAN_SPACES_STORAGE_URL;
+    let filename = speech.id + ".mp3";
+    let finalPath = url + "speeches/" + filename;
 
+    return finalPath;
+}
+
+function generateAudioTimestampsPath(speech: Parse.Object): string {
+
+    let url = process.env.DIGITALOCEAN_SPACES_STORAGE_URL;
+    let filename = speech.id + "_timestamps" + ".json";
+    let finalPath = url + "speeches/" + filename;
+
+    return finalPath;
 }

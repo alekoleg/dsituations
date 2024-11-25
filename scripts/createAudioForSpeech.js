@@ -30,7 +30,7 @@ const elevenlabsUrl = 'https://api.elevenlabs.io/v1/text-to-speech/';
 async function start() {
     const Speech = Parse.Object.extend('Speech');
     const query = new Parse.Query(Speech);
-    query.limit(2);
+    // query.limit(2);
     const results = await query.find();
     console.log('Successfully retrieved', results.length, 'objects.');
 
@@ -62,7 +62,7 @@ async function generateElevenLabsAudio(text, filename, voice_id) {
     const output = path.join(directory, `${filename}.mp3`);
 
     try {
-        await synthesize(text, output, voice_id);
+        await synthesizeWithTimestamps(text, output, voice_id);
         console.log(`Audio content written to file: ${output}`);
     } catch (error) {
         console.error('Error:', error.message);
@@ -90,6 +90,51 @@ async function synthesize(text, path, voice_id) {
         response.data.pipe(fs.createWriteStream(path));
     })
 }
+
+async function synthesizeWithTimestamps(text, filePath, voice_id) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'xi-api-key': elevenlablsKey,
+    };
+
+    const url = `${elevenlabsUrl}${voice_id}/with-timestamps`;
+    const data = {
+        text: text,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.5,
+        },
+    };
+
+    try {
+        const response = await axios.post(url, data, { headers });
+        
+        if (response.status !== 200) {
+            throw new Error(`Ошибка API: ${response.status} - ${response.statusText}`);
+        }
+
+        // Извлекаем аудио и метки времени из ответа
+        const audioBuffer = Buffer.from(response.data.audio_base64, 'base64');
+        const timestamps = response.data.alignment;
+
+        // Сохраняем аудио файл
+        fs.writeFileSync(filePath, audioBuffer);
+        
+        // Сохраняем метки времени в JSON файл
+        const timestampPath = filePath.replace('.mp3', '_timestamps.json');
+        fs.writeFileSync(timestampPath, JSON.stringify(timestamps, null, 2));
+
+        console.log(`Аудио файл сохранен: ${filePath}`);
+        console.log(`Метки времени сохранены: ${timestampPath}`);
+        
+        return timestamps;
+    } catch (error) {
+        console.error('Ошибка при генерации аудио:', error.message);
+        throw error;
+    }
+}
+
 
 
 start()
