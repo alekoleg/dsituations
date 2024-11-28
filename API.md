@@ -338,3 +338,62 @@
 - Требуется аутентификация пользователя
 - События сохраняются в таблице `dialog_events` с меткой времени
 - Для каждого события сохраняется связь с пользователем и диалогом
+
+## Эндпоинт: `situationGetPopulars`
+
+### Описание
+Возвращает список из 25 последних обновленных ситуаций, отсортированных по дате обновления (по убыванию).
+
+### Параметры запроса
+Параметры не требуются.
+
+### Формат ответа
+{
+    items: Array<{
+        id: string;
+        image: {
+            type: "URL";
+            url: string;
+        };
+        name: string;
+        subtitle: string | null;
+        number_of_dialogs: number;
+        dialogs: Array<{
+            id: string;
+            text: string;
+            translation: string;
+            audio_url: string | null;
+        }>;
+    }>;
+}
+
+### Пример ответа
+```json
+{
+    "items": [
+        {
+            "id": "situation123",
+            "image": {
+                "type": "URL",
+                "url": "https://example.com/image.jpg"
+            },
+            "name": "Название ситуации",
+            "subtitle": "Подзаголовок ситуации",
+            "number_of_dialogs": 3,
+            "dialogs": [
+                {
+                    "id": "dialog1",
+                    "text": "Hello!",
+                    "translation": "Привет!",
+                    "audio_url": "https://example.com/audio1.mp3"
+                }
+            ]
+        }
+    ]
+}
+```
+
+### Примечания
+- Возвращает максимум 25 ситуаций
+- Если для ситуации не указана ссылка на изображение (`image_link`), будет использовано изображение по умолчанию: `https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg`
+- Ситуации сортируются по полю `updatedAt` в порядке убывания (сначала самые новые)
