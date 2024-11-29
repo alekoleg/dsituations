@@ -2,7 +2,7 @@ import * as i18n from 'i18n';
 import { SectionType } from '../Common/SectionTypes';
 import { ImageType } from '../Common/ImageTypes';
 
-export async function getNewDituation(params: any): Promise<any> {
+export async function getNewDialogs(params: any): Promise<any> {
 
     let query = new Parse.Query('Dialog');
     query.limit(5);

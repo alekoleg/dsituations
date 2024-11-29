@@ -1,7 +1,5 @@
 import { SituationPreviewModel } from '../Models/SituationPreview';
 
-
-
 Parse.Cloud.define('situationGetPopulars', async (params: any): Promise<any> => {
 
     let query = new Parse.Query('Situation');
