@@ -28,7 +28,7 @@ export async function getNewDialogs(params: any): Promise<any> {
     }
 
     return {
-        id: "1",
+        id: "3",
         title: i18n.__("AppState_New_Dialogs"),
         button: null,
         section_type: {
