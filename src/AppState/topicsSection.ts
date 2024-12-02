@@ -7,6 +7,7 @@ export async function getAllTopics(params: any): Promise<any> {
 
     let query = new Parse.Query('Topic');
     query.descending('updatedAt');
+    query.notEqualTo('hidden', true);
     const topics = await query.find();
 
     let items = [];
@@ -16,8 +17,7 @@ export async function getAllTopics(params: any): Promise<any> {
             id: topic.id,
             image: {
                 type: ImageType.URL,
-                url: "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
-                // url: situation.get('image_link')
+                url: topic.get('image_link') || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
             },
             
             name: topic.get('title'),

@@ -11,6 +11,7 @@ Parse.Cloud.define('topicsAll', async (req: any) => {
     query.ascending('order');
     query.skip(offset)
     query.limit(pageSize);
+    query.notEqualTo('hidden', true);
     const topics = await query.find();
 
     let items = [];
