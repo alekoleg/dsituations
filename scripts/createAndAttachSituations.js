@@ -42,6 +42,7 @@ async function saveSituationWithRelation(title, parentObject) {
     const situationObject = new Situation();
 
     situationObject.set('title', title);
+    situationObject.set('topic', parentObject);
 
     try {
         const savedObject = await situationObject.save();

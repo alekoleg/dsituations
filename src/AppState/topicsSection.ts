@@ -6,7 +6,7 @@ import { ImageType } from '../Common/ImageTypes';
 export async function getAllTopics(params: any): Promise<any> {
 
     let query = new Parse.Query('Topic');
-    query.descending('updatedAt');
+    query.ascending('order');
     query.notEqualTo('hidden', true);
     const topics = await query.find();
 
@@ -25,7 +25,7 @@ export async function getAllTopics(params: any): Promise<any> {
     }
  
     return {
-        id: "4",
+        id: "9",
         title: i18n.__("AppState_All_Topics"),
         section_type: {
             type: SectionType.TOPIC_PREVIEWS,
@@ -33,26 +33,3 @@ export async function getAllTopics(params: any): Promise<any> {
         }
     }
 }
-
-
-
-// {
-//     "id": "4",
-//     "title": "All Topics",
-//     "button": null,
-//     "section_type": {
-//       "type": "topic_previews",
-//       "items": [
-//         {
-//           "id": "dfsdfdsf",
-//           "emoji": "💻",
-//           "name": "Technology"
-//         },
-//         {
-//           "id": "fsdfdsfd",
-//           "emoji": "🌍",
-//           "name": "Travel"
-//         }
-//       ]
-//     }
-//   }
