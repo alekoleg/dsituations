@@ -8,7 +8,7 @@ export async function getPaywallSection(params: any): Promise<any> {
     let query = new Parse.Query('Dialog');
     query.limit(3);
     query.ascending('updatedAt');
-    query.equalTo('premium', true);
+    query.equalTo('is_premium', true);
     
     const objects = await query.find();
 
@@ -25,7 +25,7 @@ export async function getPaywallSection(params: any): Promise<any> {
                 type: ImageType.URL,
                 url: dialog.get('image_link') || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
             },
-            is_premium: dialog.get('premium')
+            is_premium: dialog.get('is_premium')
         });
     }
 

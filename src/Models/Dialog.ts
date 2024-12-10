@@ -9,7 +9,7 @@ export interface Dialog {
         url: string;
     };
     is_learnt: boolean;
-    premium: boolean;
+    is_premium: boolean;
     lines: any[];
 }
 
@@ -22,7 +22,7 @@ export class DialogModel implements Dialog {
         url: string;
     };
     is_learnt: boolean;
-    premium: boolean;
+   is_premium: boolean;
     lines: any[];
 
     constructor(data: Dialog) {
@@ -31,7 +31,7 @@ export class DialogModel implements Dialog {
         this.subtitle = data.subtitle;
         this.image = data.image;
         this.is_learnt = data.is_learnt;
-        this.premium = data.premium;
+        this.is_premium = data.is_premium;
         this.lines = data.lines;
     }
 
@@ -45,11 +45,11 @@ export class DialogModel implements Dialog {
                 url: dialog.get('image_link') || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
             },
             is_learnt: dialog.get('is_learnt') ?? false,
-            premium: dialog.get('premium') ?? false,
+            is_premium: dialog.get('is_premium') ?? false,
             lines: []
         });
     }
-
+    
     toJSON(): Dialog {
         return {
             id: this.id,
@@ -57,7 +57,7 @@ export class DialogModel implements Dialog {
             subtitle: this.subtitle,
             image: this.image,
             is_learnt: this.is_learnt,
-            premium: this.premium,
+            is_premium: this.is_premium,
             lines: this.lines
         };
     }
