@@ -9,7 +9,7 @@ export async function getPaywallSection(params: any): Promise<any> {
     query.limit(3);
     query.ascending('updatedAt');
     query.equalTo('is_premium', true);
-    
+    query.notEqualTo('hidden', true);
     const objects = await query.find();
 
     let items = [];

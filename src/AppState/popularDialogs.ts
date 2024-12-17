@@ -8,7 +8,7 @@ export async function getPopularDialogs(params: any): Promise<any> {
     query.include('dialog');
     query.limit(5);
     query.descending('score');
-    
+    query.notEqualTo('hidden', true);
     const objects = await query.find();
 
     let items = [];

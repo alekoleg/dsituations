@@ -4,6 +4,7 @@ Parse.Cloud.define('situationGetPopulars', async (params: any): Promise<any> => 
 
     let query = new Parse.Query('Situation');
     query.limit(25);
+    query.notEqualTo('hidden', true);
     query.descending('updatedAt');
     const situations = await query.find();
 

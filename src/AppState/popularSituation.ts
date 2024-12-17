@@ -9,6 +9,7 @@ export async function getPopularSituation(params: any): Promise<any> {
     let query = new Parse.Query('Situation');
     query.limit(5);
     query.descending('updatedAt');
+    query.notEqualTo('hidden', true);
     const situations = await query.find();
 
     const items = await Promise.all(

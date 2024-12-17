@@ -8,6 +8,7 @@ export async function getNewDialogs(params: any): Promise<any> {
     query.limit(5);
     query.descending('updatedAt');
     query.include('situation');
+    query.notEqualTo('hidden', true);
     const objects = await query.find();
 
     let items = [];
