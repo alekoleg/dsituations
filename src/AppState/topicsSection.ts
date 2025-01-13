@@ -17,7 +17,7 @@ export async function getAllTopics(params: any): Promise<any> {
             id: topic.id,
             image: {
                 type: ImageType.URL,
-                url: topic.get('image_link') || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
+                data: topic.get('image_link') || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
             },
             
             name: topic.get('title'),
