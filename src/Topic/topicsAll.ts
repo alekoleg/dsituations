@@ -34,7 +34,8 @@ Parse.Cloud.define('topicsAll', async (req: any) => {
             id: topic.id,
             image: {
                 type: ImageType.URL,
-                url: topic.get("image_link") || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
+                data: topic.get("image_link") || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg",
+                background: null
             },
             name: topic.get('title'),
             situations_previews: situations_previews.map(situation => situation.toJSON()),

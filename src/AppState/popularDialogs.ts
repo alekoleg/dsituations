@@ -39,7 +39,7 @@ export async function getPopularDialogs(params: any): Promise<any> {
             situation_name: situation.get('title'),
             image: {
                 type: ImageType.EMOJI,
-                data: dialog.get('emoji'),
+                data: dialog.get('emoji') ?? "🤔",
                 background: null
             },
             is_premium: dialog.get('is_premium')
