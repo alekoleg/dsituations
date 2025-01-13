@@ -27,6 +27,7 @@ Parse.masterKey = masterKey;
 async function fetchSituations() {
     const Situation = Parse.Object.extend('Situation');
     const query = new Parse.Query(Situation);
+    query.equalTo('dialogs_count', 0);
     // query.limit(1);
 
     try {

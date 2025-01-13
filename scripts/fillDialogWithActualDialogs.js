@@ -1,4 +1,3 @@
-
 const Parse = require('parse/node');
 const path = require('path');
 const OpenAI = require('openai');
@@ -12,7 +11,6 @@ const openaiApiKey = process.env.OPENAI_API_KEY;
 
 const openAI_Situations_Assistant_ID = "asst_NXTKrg5yTLsyE38busubncqP"
 const parseSpeaker1Id = "2B2zENPfFH"
-const parseSpeaker2Id = "QNnMXmx2gr"
 
 console.log('appId:', appId);
 
@@ -31,13 +29,13 @@ const openai = new OpenAI({apiKey: openaiApiKey});
 async function fetchDialogs() {
     const Dialog = Parse.Object.extend('Dialog');
     const query = new Parse.Query(Dialog);
-    query.limit(1);  // Установка лимита в 5000
+    query.equalTo('emoji', null);
+    query.limit(200);
 
-    // поиск спикеров
+    // Получаем только speaker1
     const Speaker = Parse.Object.extend("Speaker");
     const querySpeaker = new Parse.Query(Speaker);
     const speaker1 = await querySpeaker.get(parseSpeaker1Id);
-    const speaker2 = await querySpeaker.get(parseSpeaker2Id);
 
     try {
         const results = await query.find({ useMasterKey: true });
@@ -46,9 +44,9 @@ async function fetchDialogs() {
             const title = dialog.get('title');
             const subtitle = dialog.get('subtitle');
             if (title) {
-                await sendTitleToOpenAI(title, subtitle, "a1", "dialog_a1", dialog, speaker1, speaker2);
-                await sendTitleToOpenAI(title, subtitle, "b1", "dialog_b1", dialog, speaker1, speaker2);
-                await sendTitleToOpenAI(title, subtitle, "c1", "dialog_c1", dialog, speaker1, speaker2);
+                await sendTitleToOpenAI(title, subtitle, "a1", "dialog_a1", dialog, speaker1);
+                await sendTitleToOpenAI(title, subtitle, "b1", "dialog_b1", dialog, speaker1);
+                await sendTitleToOpenAI(title, subtitle, "c1", "dialog_c1", dialog, speaker1);
             }
         }
 
@@ -59,7 +57,7 @@ async function fetchDialogs() {
 }
 
 // Функция для отправки Title в OpenAI Assistant
-async function sendTitleToOpenAI(title, subtitle, level, reletionKey, mainDialogObject, speaker1, speaker2) {
+async function sendTitleToOpenAI(title, subtitle, level, reletionKey, mainDialogObject, speaker1) {
     try {
         // Создаем новый поток для разговора
         const thread = await openai.beta.threads.create();
@@ -90,18 +88,26 @@ async function sendTitleToOpenAI(title, subtitle, level, reletionKey, mainDialog
         console.log("Message:", message.content[0].text.value); 
         let response = JSON.parse(message.content[0].text.value);
         let dialog = response["dialog"];
+        
+        // Создаем Speaker 2 из JSON
+        const Speaker = Parse.Object.extend("Speaker");
+        const speaker2 = new Speaker();
+        speaker2.set("name", response.speaker_2.name);
+        speaker2.set("comment", response.speaker_2.occupation);
+        speaker2.set("sex", response.speaker_2.sex);
+        speaker2.set("image_link", "https://dialogsstorage.fra1.cdn.digitaloceanspaces.com/images/speaker/defaultSpeaker.png")
+        await speaker2.save();
 
+        // Добавляем эмодзи к диалогу
+        mainDialogObject.set("emoji", response.emoji);
         
         const speechReletion = mainDialogObject.relation(reletionKey);
-        // for with index
+        
         for (var i = 0; i < dialog.length; i++) {
-            
             const speechFromDialog = dialog[i];
             const Speech = Parse.Object.extend("Speech"); 
             const parseObject = new Speech();
             
-            
-
             parseObject.set("text", speechFromDialog.text);
             parseObject.set("order", i);
             if (speechFromDialog.speaker === "speaker1") {

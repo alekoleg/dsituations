@@ -37,7 +37,7 @@ async function genearateDialogsBasedOnTitle(title, situation) {
             let response = JSON.parse(message.content[0].text.value);
             let dialogs = response["dialogs"];
             let relation = situation.relation("dialogs");
-
+            
             for (const dialog of dialogs) {
                 console.log("dialog:", dialog);
                 const Dialog = Parse.Object.extend("Dialog"); 
@@ -45,10 +45,12 @@ async function genearateDialogsBasedOnTitle(title, situation) {
                 dialogObject.set("title", dialog.title);
                 dialogObject.set("subtitle", dialog.subtitle);
                 dialogObject.set("situation", situation);
+                dialogObject.set("is_premium", Math.random() < 0.5);
                 await dialogObject.save();
                 relation.add(dialogObject);
             }
 
+            situation.set("emoji", response.emoji);
             await situation.save();
         } else {
             console.log(run.status);
