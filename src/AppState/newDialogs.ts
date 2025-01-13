@@ -20,9 +20,9 @@ export async function getNewDialogs(params: any): Promise<any> {
             name: object.get('title'),
             situation_name: situation.get('title'),
             image: {
-                type: ImageType.URL,
-                url: "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
-                // url: situation.get('image_link')
+                type: ImageType.EMOJI,
+                data: object.get('emoji'),
+                background: null
             },
             is_premium: object.get('is_premium')
         });

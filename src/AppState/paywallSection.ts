@@ -22,8 +22,9 @@ export async function getPaywallSection(params: any): Promise<any> {
             name: dialog.get('title'),
             situation_name: situation.get('title'),
             image: {
-                type: ImageType.URL,
-                url: dialog.get('image_link') || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
+                type: ImageType.EMOJI,
+                data: dialog.get('emoji'),
+                background: null
             },
             is_premium: dialog.get('is_premium')
         });

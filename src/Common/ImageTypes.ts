@@ -1,5 +1,6 @@
 export const ImageType = {
-    URL: 'url'
+    URL: 'url',
+    EMOJI: 'emoji'
 } as const; 
 
 

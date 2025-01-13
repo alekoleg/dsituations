@@ -35,8 +35,9 @@ Parse.Cloud.define('dialogById', async (req: any) => {
         }
         let author = speaker.get("name");
         let avatar = {
-            type : ImageType.URL,
-            url : speaker.get("image_link")
+            type : ImageType.EMOJI,
+            data : speaker.get("emoji"),
+            background: null
          }
         let style = speaker.id == initialSpeakerId ? "gray" : "blue";
         let voice = {

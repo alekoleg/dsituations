@@ -9,25 +9,45 @@ export async function getPopularDialogs(params: any): Promise<any> {
     query.limit(5);
     query.descending('score');
     query.notEqualTo('hidden', true);
+    query.include('dialog');
     const objects = await query.find();
 
     let items = [];
+    console.log('Starting to process dialog objects');
+    
     for (let object of objects) {
-        let dialog = object.get('dialog');
-        let situation = dialog.get('situation');
-        await situation.fetch();
+        console.log('Processing object:', object);
         
-        items.push({
+        let dialog = object.get('dialog');
+        if (!dialog) {
+            console.log('Dialog not found in object:', object);
+            continue;
+        }
+        
+        let situation = dialog.get('situation');
+        if (!situation) {
+            console.log('Situation not found in dialog:', dialog);
+            continue;
+        }
+        
+        await situation.fetch();
+        console.log('Fetched situation details:', situation.get('title'));
+        
+        const itemToAdd = {
             id: dialog.id,
             name: dialog.get('title'),
             situation_name: situation.get('title'),
             image: {
-                type: ImageType.URL,
-                url: "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
-                // url: situation.get('image_link')
+                type: ImageType.EMOJI,
+                data: dialog.get('emoji'),
+                background: null
             },
             is_premium: dialog.get('is_premium')
-        });
+        };
+        console.log('Prepared item for push:', itemToAdd);
+        
+        items.push(itemToAdd);
+        console.log('Added item to items array. Current length:', items.length);
     }
 
     return {

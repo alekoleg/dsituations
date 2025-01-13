@@ -5,7 +5,8 @@ export interface SituationPreview {
     id: string;
     image: {
         type: String;
-        url: string;
+        data: string;
+        background: string | null;
     };
     name: string;
     subtitle: string | null;
@@ -17,7 +18,8 @@ export class SituationPreviewModel implements SituationPreview {
     id: string;
     image: {
         type: String;
-        url: string;
+        data: string;
+        background: string | null;
     };
     name: string;
     subtitle: string | null;
@@ -34,11 +36,18 @@ export class SituationPreviewModel implements SituationPreview {
     }
 
     static async fromParse(situation: Parse.Object): Promise<SituationPreviewModel> {
+        var imageData = situation.get('image_link') 
+        var imageType: string = ImageType.URL
+        if (imageData == null) {
+            imageData = situation.get('emoji')
+            imageType = ImageType.EMOJI
+        }
         return new SituationPreviewModel({
             id: situation.id,
             image: {
-                type: ImageType.URL,
-                url: situation.get('image_link') || "https://i.pinimg.com/originals/5b/6e/ca/5b6eca63605bea0eeb48db43f77fa0ce.jpg"
+                type: imageType,
+                data: imageData,
+                background: null
             },
             name: situation.get('title'),
             subtitle: situation.get('subtitle') || null,
