@@ -13,25 +13,19 @@ export async function getPopularDialogs(params: any): Promise<any> {
     const objects = await query.find();
 
     let items = [];
-    console.log('Starting to process dialog objects');
     
     for (let object of objects) {
-        console.log('Processing object:', object);
-        
         let dialog = object.get('dialog');
         if (!dialog) {
-            console.log('Dialog not found in object:', object);
             continue;
         }
         
         let situation = dialog.get('situation');
         if (!situation) {
-            console.log('Situation not found in dialog:', dialog);
             continue;
         }
         
         await situation.fetch();
-        console.log('Fetched situation details:', situation.get('title'));
         
         const itemToAdd = {
             id: dialog.id,
@@ -44,12 +38,14 @@ export async function getPopularDialogs(params: any): Promise<any> {
             },
             is_premium: dialog.get('is_premium')
         };
-        console.log('Prepared item for push:', itemToAdd);
         
         items.push(itemToAdd);
-        console.log('Added item to items array. Current length:', items.length);
     }
 
+    if (items.length === 0) {
+        return null;
+    }
+    
     return {
         id: "1",
         title: i18n.__("AppState_Popular_Dialogs"),
