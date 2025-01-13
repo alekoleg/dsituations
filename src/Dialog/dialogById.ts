@@ -74,6 +74,8 @@ function generateAudioPath(speech: Parse.Object): string {
 
 function generateAudioTimestampsPath(speech: Parse.Object): string {
 
+    return "https://dialogsstorage.fra1.cdn.digitaloceanspaces.com/speeches/1ZuHXNnTH8_timestamps.json"
+
     let url = process.env.DIGITALOCEAN_SPACES_STORAGE_URL;
     let filename = speech.id + "_timestamps" + ".json";
     let finalPath = url + "speeches/" + filename;
