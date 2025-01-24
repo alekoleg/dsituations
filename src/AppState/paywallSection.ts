@@ -1,33 +1,37 @@
-
 import * as i18n from 'i18n';
 import { SectionType } from '../Common/SectionTypes';
 import { ImageType } from '../Common/ImageTypes';
 
 export async function getPaywallSection(params: any): Promise<any> {
-
-    let query = new Parse.Query('Dialog');
-    query.limit(3);
-    query.ascending('updatedAt');
-    query.equalTo('is_premium', true);
-    query.notEqualTo('hidden', true);
-    const objects = await query.find();
+    // Получаем ситуации
+    let situationQuery = new Parse.Query('Situation');
+    situationQuery.limit(3);
+    situationQuery.ascending('updatedAt');
+    const situations = await situationQuery.find();
 
     let items = [];
-    for (let dialog of objects) {
-        let situation = dialog.get('situation');
-        await situation.fetch();
+    for (let situation of situations) {
+        // Получаем диалоги через relation
+        const dialogsRelation = situation.relation('dialogs');
+        const dialogQuery = dialogsRelation.query();
+        dialogQuery.equalTo('is_premium', true);
+        dialogQuery.notEqualTo('hidden', true);
+        dialogQuery.limit(1);
         
-        items.push({
-            id: dialog.id,
-            name: dialog.get('title'),
-            situation_name: situation.get('title'),
-            image: {
-                type: ImageType.EMOJI,
-                data: dialog.get('emoji') ?? "🤔",
-                background: null
-            },
-            is_premium: dialog.get('is_premium')
-        });
+        const dialog = await dialogQuery.first();
+        if (dialog) {
+            items.push({
+                id: dialog.id,
+                name: dialog.get('title'),
+                situation_name: situation.get('title'),
+                image: {
+                    type: ImageType.EMOJI,
+                    data: dialog.get('emoji') ?? "🤔",
+                    background: null
+                },
+                is_premium: dialog.get('is_premium')
+            });
+        }
     }
 
     return {
@@ -45,7 +49,8 @@ export async function getPaywallSection(params: any): Promise<any> {
                 title: i18n.__("AppState_Paywall_Dialogs_Previews_Title"),
                 subtitle: i18n.__("AppState_Paywall_Dialogs_Previews_Subtitle"),
                 button_title: i18n.__("AppState_Paywall_Dialogs_Previews_Button_Title"),
-                dialogs_previews: items
+                dialogs_previews: items,
+                total_paid_dialogs: 170
             }
         }
     }
