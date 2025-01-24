@@ -95,7 +95,7 @@ async function sendTitleToOpenAI(title, subtitle, level, reletionKey, mainDialog
         speaker2.set("name", response.speaker_2.name);
         speaker2.set("comment", response.speaker_2.occupation);
         speaker2.set("sex", response.speaker_2.sex);
-        speaker2.set("image_link", "https://dialogsstorage.fra1.cdn.digitaloceanspaces.com/images/speaker/defaultSpeaker.png")
+        speaker2.set("image_link", "https://dialogs.fra1.cdn.digitaloceanspaces.com/images/speaker/defaultSpeaker.png")
         await speaker2.save();
 
         // Добавляем эмодзи к диалогу

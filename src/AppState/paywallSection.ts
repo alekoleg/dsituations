@@ -40,7 +40,7 @@ export async function getPaywallSection(params: any): Promise<any> {
             paywall: {
                 image: {
                     type: ImageType.URL,
-                    data: "https://dialogsstorage.fra1.cdn.digitaloceanspaces.com/images/paywallStar.png"
+                    data: "https://dialogs.fra1.cdn.digitaloceanspaces.com/images/paywallStar.png"
                 },
                 title: i18n.__("AppState_Paywall_Dialogs_Previews_Title"),
                 subtitle: i18n.__("AppState_Paywall_Dialogs_Previews_Subtitle"),
