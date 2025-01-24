@@ -19,6 +19,7 @@ Parse.Cloud.define('topicsAll', async (req: any) => {
         
         const previewCount = 5;
         const situationQuery = await topic.relation('situations').query()
+        situationQuery.notEqualTo('hidden', true);
         situationQuery.limit(previewCount + 1);
         const results = await situationQuery.find();
         let trimmedResults = results;

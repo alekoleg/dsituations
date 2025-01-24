@@ -21,7 +21,7 @@ export async function getNewDialogs(params: any): Promise<any> {
             situation_name: situation.get('title'),
             image: {
                 type: ImageType.EMOJI,
-                data: object.get('emoji'),
+                data: object.get('emoji') ?? "🤔",
                 background: null
             },
             is_premium: object.get('is_premium')

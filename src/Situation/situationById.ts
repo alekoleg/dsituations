@@ -15,6 +15,7 @@ Parse.Cloud.define('situationById', async (req: any) => {
     let relationQuery = situation.relation('dialogs').query();
     relationQuery.limit(1000);
     relationQuery.ascending('createdAt');
+    relationQuery.notEqualTo('hidden', true);
     let results = await relationQuery.find();
     console.log(results);
     let dialogs = await Promise.all(

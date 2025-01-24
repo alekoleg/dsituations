@@ -13,9 +13,12 @@ Parse.Cloud.define('topicById', async (req: any) => {
     let query = new Parse.Query('Topic');
     let topic = await query.get(topicId);
     
-    let results = await topic.relation('situations').query().find();
+    let situationsQuery = await topic.relation('situations').query();
+    situationsQuery.notEqualTo('hidden', true);
+    let situations = await situationsQuery.find();
+
     let situations_previews = await Promise.all(
-        results.map(situation => SituationPreviewModel.fromParse(situation))
+        situations.map(situation => SituationPreviewModel.fromParse(situation))
     );
 
     let topicModel = TopicModel.fromParse(topic);
