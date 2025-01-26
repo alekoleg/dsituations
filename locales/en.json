@@ -8,6 +8,6 @@
     "AppState_Paywall_Title" : "Featured Dialogues",
     "AppState_Paywall_Dialogs_Previews_Title" : "Try Full Access for Free",
     "AppState_Paywall_Dialogs_Previews_Subtitle" : "Unlock unlimited access to all dialogues and unlock premium features",
-    "AppState_Paywall_Dialogs_Previews_Button_Title" : "Get 7 Days for Free"
-    
+    "AppState_Paywall_Dialogs_Previews_Button_Title" : "Get 7 Days for Free",
+    "AppState_Paywall_Dialogs_Previews_Total_Paid_Dialogs" : "Unlock %s dialogues"
 }

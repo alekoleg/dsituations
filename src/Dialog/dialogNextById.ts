@@ -1,7 +1,8 @@
 import * as parse from 'parse/node';
 import { DialogModel } from '../Models/Dialog';
 import { KnowledgeLevel, parseKnowledgeLevel } from '../Common/KnowledgeLevel';
-
+import { ImageType } from '../Common/ImageTypes';
+import { SectionType } from '../Common/SectionTypes';
 Parse.Cloud.define('dialogNextById', async (req: any) => {
     const dialogId = req.params.id;
     const knowledgeLevel = parseKnowledgeLevel(req.params.level) ?? KnowledgeLevel.B;
@@ -49,11 +50,18 @@ Parse.Cloud.define('dialogNextById', async (req: any) => {
     const nextDialog = allDialogs[currentIndex + 1];
     console.log(`[dialogNextById] Found next dialog: ${nextDialog.id}`);
 
-    // Вызываем существующую функцию dialogById с ID следующего диалога
-    const params = {
+    // Создаем объект ответа в формате DIALOG_WITH_SECTION_PREVIEWS
+    const item = {
         id: nextDialog.id,
-        level: knowledgeLevel
+        name: nextDialog.get('title'),
+        situation_name: situation.get('title'),
+        image: {
+            type: ImageType.EMOJI,
+            data: nextDialog.get('emoji') ?? "🤔",
+            background: null
+        },
+        is_premium: nextDialog.get('is_premium')
     };
-    console.log(`[dialogNextById] Calling dialogById with params:`, params);
-    return await Parse.Cloud.run('dialogById', params);
+
+    return item;
 });

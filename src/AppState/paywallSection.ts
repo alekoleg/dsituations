@@ -50,7 +50,7 @@ export async function getPaywallSection(params: any): Promise<any> {
                 subtitle: i18n.__("AppState_Paywall_Dialogs_Previews_Subtitle"),
                 button_title: i18n.__("AppState_Paywall_Dialogs_Previews_Button_Title"),
                 dialogs_previews: items,
-                total_paid_dialogs: 170
+                total_paid_dialogs: i18n.__("AppState_Paywall_Dialogs_Previews_Total_Paid_Dialogs").replace("%s", "330")
             }
         }
     }
