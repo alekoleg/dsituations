@@ -15,6 +15,7 @@ Parse.Cloud.job('countDialogsForSituation', async (request: any) => {
         let situations = await query.find();
         for (let situation of situations) {
             let relationQuery = situation.relation('dialogs').query();
+            relationQuery.notEqualTo('hidden', true);
             let count = await relationQuery.count();
             situation.set('dialogs_count', count);
             await situation.save(); 

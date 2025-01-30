@@ -21,7 +21,8 @@ Parse.Cloud.define('appState', async (req: any) => {
           popularDialogs,
           paywall,
           topics
-        ].filter(section => section !== null)
+        ].filter(section => section !== null),
+        "total_number_of_dialogs": 330
     }
 
     return state;

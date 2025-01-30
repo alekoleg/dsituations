@@ -17,7 +17,7 @@ Parse.Cloud.define('topicsAll', async (req: any) => {
     let items = [];
     for (let topic of topics) {
         
-        const previewCount = 5;
+        const previewCount = 7;
         const situationQuery = await topic.relation('situations').query()
         situationQuery.notEqualTo('hidden', true);
         situationQuery.limit(previewCount + 1);
