@@ -23,32 +23,75 @@ Parse.initialize(appId);
 Parse.serverURL = serverURL;
 Parse.masterKey = masterKey;
 
-const elevenlabsSpeacker1 = 'onwK4e9ZLuTAKqWW03F9';
-const elevenlabsSpeacker2 = '9F4C8ztpNUmXkdDDbz3J';
+// david
+// const elevenlabsSpeacker1 = 'onwK4e9ZLuTAKqWW03F9';
+// Liam
+const elevenlabsSpeacker1 = 'TX3LPaxmHKxFdv7VOQHJ';
+
+const elevenlabsSpeacker2Female = 'cgSgspJ2msm6clMCkdW9';
+const elevenlabsSpeacker2Male = 'iP95p4xoKVk53GoZ742B';
 const elevenlabsUrl = 'https://api.elevenlabs.io/v1/text-to-speech/';
 
-async function start() {
-    const Speech = Parse.Object.extend('Speech');
-    const query = new Parse.Query(Speech);
-    // query.limit(2);
-    const results = await query.find();
-    console.log('Successfully retrieved', results.length, 'objects.');
+const AudioVersionId = 'v21012025.2';
 
-    for (let i = 0; i < results.length; i++) {
-        const object = results[i];
-        const speaker = object.get('speaker');
-        await speaker.fetch();
-        console.log('speaker:', speaker);
-        const speakerName  = speaker.get('name');
-        let voiceId = elevenlabsSpeacker1;
-        console.log('speakerName:', speakerName);
-        if (speakerName === 'Oleg') {
-            voiceId = elevenlabsSpeacker2;
-        } 
-        console.log(object.id + ' - ' + object.get('text'));
-        await generateElevenLabsAudio(object.get('text'), object.id, voiceId);
-        console.log('-------------------------------------');
+async function start() {
+
+    // find not hidden dialogs
+    const Dialog = Parse.Object.extend('Dialog');
+    const queryDialog = new Parse.Query(Dialog);
+    queryDialog.notEqualTo('hidden', true);
+    queryDialog.limit(1000);
+    const dialogs = await queryDialog.find();
+    
+    console.log('Found', dialogs.length, 'not hidden dialogs');
+
+    var characterCounter = 0;
+
+    // get speeches relation from dialogs
+    for (let i = 0; i < dialogs.length; i++) {
+        const dialog = dialogs[i];
+        const speechesQuery = dialog.relation('dialog_b1').query();
+        speechesQuery.notEqualTo("audio_version", AudioVersionId);
+        const results = await speechesQuery.find();
+        console.log('Found', results.length, 'speeches for dialog', dialog.id);
+
+
+        for (let i = 0; i < results.length; i++) {
+            const object = results[i];
+            // log object
+            console.log('object:', object.id);
+            const speaker = object.get('speaker');
+            if (speaker.id === "TK8lho9yAI") {
+                console.log('speaker not found');
+                console.log('-------------------------------------');
+                continue;
+            }
+            await speaker.fetch();
+            console.log('speaker:', speaker);
+
+            let voiceId;
+            const sex = speaker.get('sex');
+            console.log('sex:', sex);
+            // main character
+            if (speaker.id === '2B2zENPfFH') {
+                voiceId = elevenlabsSpeacker1;
+            } else if (sex === 'female') {
+                voiceId = elevenlabsSpeacker2Female;
+            } else if (object.get('sex') === 'male') {
+                voiceId = elevenlabsSpeacker2Male;
+            }
+
+            // characterCounter += object.get('text').length;
+
+            console.log(object.id + ' - ' + object.get('text'));
+            await generateElevenLabsAudio(object.get('text'), object.id, voiceId);
+            console.log('-------------------------------------');
+            object.set('audio_version', AudioVersionId);
+            await object.save();
+        }
     }
+
+    console.log('characterCounter:', characterCounter);
 }
 
 async function generateElevenLabsAudio(text, filename, voice_id) {
@@ -108,6 +151,9 @@ async function synthesizeWithTimestamps(text, filePath, voice_id) {
     };
 
     try {
+        // log request
+        console.log('request:', url);
+        
         const response = await axios.post(url, data, { headers });
         
         if (response.status !== 200) {
