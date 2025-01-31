@@ -6,6 +6,7 @@ export async function getPaywallSection(params: any): Promise<any> {
     // Получаем ситуации
     let situationQuery = new Parse.Query('Situation');
     situationQuery.limit(3);
+    situationQuery.notEqualTo('hidden', true);
     situationQuery.ascending('updatedAt');
     const situations = await situationQuery.find();
 
