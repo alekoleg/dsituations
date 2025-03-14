@@ -63,7 +63,7 @@ Parse.Cloud.define('dialogById', async (req: any) => {
         lines.push(dialogLine);
     }
 
-    if (semver.gte(version, '2.0.0')) {
+    if (version != null && version != undefined && semver.gte(version, '2.0.0')) {
 
         // Получаем интерактивные элементы диалога
         let taskLevelKey = getTasksLevelKeyByVersion(knowledgeLevel);
