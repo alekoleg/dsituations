@@ -33,3 +33,14 @@ export function getKnowledgeLevelKey(value: KnowledgeLevel): string {
             return "dialog_c1";
     }
 } 
+
+export function getTasksLevelKeyByVersion(value: KnowledgeLevel): string {
+    switch (value) {
+        case KnowledgeLevel.A:
+            return "tasks_a1";
+        case KnowledgeLevel.B:
+            return "tasks_b1";
+        case KnowledgeLevel.C:
+            return "tasks_c1";
+    }
+}
