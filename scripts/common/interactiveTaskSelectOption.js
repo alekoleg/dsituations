@@ -14,7 +14,6 @@ const topicValue = [
     "Inference Questions (Reading Between the Lines)",
     "Detail-Oriented Questions (Checking Specific Information)",
     "Next Step Prediction (What Happens Next?)",
-
 ];
 
 const orderValue = [
@@ -23,22 +22,11 @@ const orderValue = [
     5,
 ];
 
-function getSystemPrompt() {
-    // random from paramValues1
-    const question1Topic = topicValue[Math.floor(Math.random() * topicValue.length)];
-    // random from paramValues2
-    const question1Order = orderValue[Math.floor(Math.random() * orderValue.length)];
-    const question2Topic = topicValue[Math.floor(Math.random() * topicValue.length)];
+function getSystemPrompt(topic) {
+    const SystemPrompt = `You are a professional API Service that generates ONE question for dialogs. 
 
-    const SystemPrompt = `You are a professional API Service that generates two questions for dialogs. 
-
-First Question Requirements
-Topic: ${question1Topic}
-Task: Create one question after the ${question1Order + 1} message. Process only the first ${question1Order} lines of text. Ignore all lines after the ${question1Order}th.
-
-Second Question Requirements
-Topic: ${question2Topic}
-Task: Create another question at the end of the dialogue about the last 3 lines. Process only the last 3 lines of text. Ignore all lines before the last 3 lines.
+Question Requirements
+Topic: ${topic}
 
 Questions
 	•	Each question should include several answer options, with one correct option and several incorrect ones.
@@ -50,7 +38,7 @@ Output Format
 ONLY REPLY IN JSON. NO PROSE.  No AI introduction, no AI analysis, return generated data only, not human-readable,
 Allways must provide sample questions in the following JSON format:
 
-[
+
   {
     "id": "[unique identifier]",
     "level": "[a1|b1]",
@@ -67,11 +55,11 @@ Allways must provide sample questions in the following JSON format:
       ]
     }
   }
-]
+
 
 Example
 
-[
+
   {
     "id": "saldjaslk",
     "level": "a1",
@@ -97,7 +85,7 @@ Example
       ]
     }
   }
-]`;
+`;
     return SystemPrompt;
 }
 
@@ -137,46 +125,68 @@ function extractJSON(text) {
 async function processText(inputText) {
     try {
         // Создаем системный промпт с подстановкой случайных параметров
-        const systemPrompt = getSystemPrompt();
-
+        const question1Topic = topicValue[Math.floor(Math.random() * topicValue.length)];
+        // random from paramValues2
+        const question1Order = orderValue[Math.floor(Math.random() * orderValue.length)];
+        const question2Topic = topicValue[Math.floor(Math.random() * topicValue.length)];
+        let systemPrompt = getSystemPrompt(question1Topic);
         console.log(`Используемые параметры: ${systemPrompt}`);
+        // get first question1Order lines from inputText
+        let textForQuestion1 = inputText.split('\n').slice(0, question1Order).join('\n');
 
-        // Создаем чат с OpenAI
-        const response = await openai.chat.completions.create({
-            // model: "gpt-4o", // или любая другая подходящая модель
-            // model: "o3-mini-2025-01-31", // или любая другая подходящая модель
-            model: "gpt-4o-mini", // или любая другая подходящая модель
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: inputText }
-            ],
-            temperature: 0.7
-        });
+        let question1 = await generateResponseForOpenAI(textForQuestion1, systemPrompt);
+        question1.order = question1Order;
 
-        // Получаем ответ
-        const responseContent = response.choices[0].message.content;
+        let systemPrompt2 = getSystemPrompt(question2Topic);
+        console.log(`Используемые параметры: ${systemPrompt2}`);
+        let textForQuestion2 = inputText
+        let question2 = await generateResponseForOpenAI(textForQuestion2, systemPrompt2);
+        question2.order = inputText.split('\n').length;
 
-        console.log(`Ответ: ${responseContent}`);
+        // merge array question1 and question2 in one array
+        let result = [question1, question2];
 
-        // Проверяем, является ли ответ валидным JSON
-        if (isValidJSON(responseContent)) {
-            return JSON.parse(responseContent);
-        } else {
-            // Пытаемся извлечь JSON из текста
-            const extractedJSON = extractJSON(responseContent);
-            if (extractedJSON && isValidJSON(extractedJSON)) {
-                return JSON.parse(extractedJSON);
-            } else {
-                // Если не удалось получить валидный JSON, возвращаем ошибку
-                throw new Error("Не удалось получить валидный JSON от API");
-            }
-        }
+        console.log(`Результат: ${result}`);
+        return result;
     } catch (error) {
         console.error("Ошибка при обработке текста:", error);
         return {
             error: true,
             message: error.message || "Произошла ошибка при обработке текста"
         };
+    }
+}
+
+async function generateResponseForOpenAI(inputText, systemPrompt) {
+    // Создаем чат с OpenAI
+    const response = await openai.chat.completions.create({
+        // model: "gpt-4o", // или любая другая подходящая модель
+        // model: "o3-mini-2025-01-31", // или любая другая подходящая модель
+        model: "gpt-4o-mini", // или любая другая подходящая модель
+        messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: inputText }
+        ],
+        temperature: 0.7
+    });
+
+    // Получаем ответ
+    const responseContent = response.choices[0].message.content;
+
+    console.log(`Ответ: ${responseContent}`);
+
+    // Проверяем, является ли ответ валидным JSON
+    if (isValidJSON(responseContent)) {
+        return JSON.parse(responseContent);
+    } else {
+        // Пытаемся извлечь JSON из текста
+        const extractedJSON = extractJSON(responseContent);
+        if (extractedJSON && isValidJSON(extractedJSON)) {
+            return JSON.parse(extractedJSON);
+        } else {
+            // Если не удалось получить валидный JSON, возвращаем ошибку
+            throw new Error("Не удалось получить валидный JSON от API");
+        }
     }
 }
 
