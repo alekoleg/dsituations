@@ -258,26 +258,54 @@ async function generateTasksForDialog(dialogId, level = 'b') {
   }
 }
 
-// Обработка аргументов командной строки
-const args = process.argv.slice(2);
-const dialogId = args[0];
-const level = args[1] || 'b'; // По умолчанию B1
 
-if (!dialogId) {
-  console.error('Укажите ID диалога в качестве аргумента');
-  process.exit(1);
+
+async function generateTasksForDialogs() {
+    const dialogsQuery = new Parse.Query('Dialog');
+    dialogsQuery.equalTo('hidden', false);
+    dialogsQuery.limit(1000);
+    dialogsQuery.skip(0);
+    const dialogs = await dialogsQuery.find();
+    
+    for (const dialog of dialogs) {
+        const tastkQuery = dialog.relation('tasks_b1').query();
+        const tasks = await tastkQuery.find();
+        if (tasks.length > 0) {
+            console.log(`Диалог ${dialog.id} уже имеет задания`);
+            continue;
+        } else {
+            console.log(`Диалог ${dialog.id} не имеет заданий`);
+            try {
+                await generateTasksForDialog(dialog.id, 'b');
+            } catch (error) {
+                console.error(`Ошибка при генерации заданий для диалога ${dialog.id}: ${error}`);
+            }
+        }
+    }
 }
 
-// Запускаем процесс
-generateTasksForDialog(dialogId, level)
-  .then((tasks) => {
-    if (tasks) {
-      console.log(`Создано ${tasks.length} интерактивных заданий`);
-    }
-    console.log('Скрипт успешно завершен');
-    process.exit(0);
-  })
-  .catch((error) => {
-    console.error('Критическая ошибка при выполнении скрипта:', error);
-    process.exit(1);
-  });
+generateTasksForDialogs();
+
+// // Обработка аргументов командной строки
+// const args = process.argv.slice(2);
+// const dialogId = args[0];
+// const level = args[1] || 'b'; // По умолчанию B1
+
+// if (!dialogId) {
+//   console.error('Укажите ID диалога в качестве аргумента');
+//   process.exit(1);
+// }
+
+// // Запускаем процесс
+// generateTasksForDialog(dialogId, level)
+//   .then((tasks) => {
+//     if (tasks) {
+//       console.log(`Создано ${tasks.length} интерактивных заданий`);
+//     }
+//     console.log('Скрипт успешно завершен');
+//     process.exit(0);
+//   })
+//   .catch((error) => {
+//     console.error('Критическая ошибка при выполнении скрипта:', error);
+//     process.exit(1);
+//   });

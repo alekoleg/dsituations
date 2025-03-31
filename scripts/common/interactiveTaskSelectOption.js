@@ -13,7 +13,6 @@ const topicValue = [
     "Vocabulary & Phrase Meaning Questions",
     "Inference Questions (Reading Between the Lines)",
     "Detail-Oriented Questions (Checking Specific Information)",
-    "Next Step Prediction (What Happens Next?)",
 ];
 
 const orderValue = [
@@ -162,7 +161,7 @@ async function generateResponseForOpenAI(inputText, systemPrompt) {
     const response = await openai.chat.completions.create({
         // model: "gpt-4o", // или любая другая подходящая модель
         // model: "o3-mini-2025-01-31", // или любая другая подходящая модель
-        model: "gpt-4o-mini", // или любая другая подходящая модель
+        model: "gpt-4o", // или любая другая подходящая модель
         messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: inputText }
