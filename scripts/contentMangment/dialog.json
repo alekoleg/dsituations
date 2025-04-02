@@ -1,0 +1,145 @@
+{
+  "id": "1EUsaRBdYn",
+  "title": "Overheard Conversations",
+  "subtitle": "Comment on amusing or strange talks from fellow commuters.",
+  "situation_id": "6oZNTvmYNF",
+  "level": "b1",
+  "isPremium": true,
+  "speakers": [
+    {
+      "id": "2B2zENPfFH",
+      "name": "You",
+      "avatar": {
+        "type": "url",
+        "data": "https://dialogs.fra1.cdn.digitaloceanspaces.com/images/speaker/mainCharacter.png"
+      }
+    },
+    {
+      "id": "tscFH7rvti",
+      "name": "Emma",
+      "avatar": {
+        "type": "url",
+        "data": "https://dialogs.fra1.cdn.digitaloceanspaces.com/images/speaker/defaultSpeaker.png"
+      }
+    }
+  ],
+  "lines": [
+    {
+      "order": 0,
+      "speaker": "2B2zENPfFH",
+      "text": "Hey Emma, you won't believe what I overheard on the train this morning."
+    },
+    {
+      "order": 1,
+      "speaker": "tscFH7rvti",
+      "text": "Oh, do tell! I love a good train story."
+    },
+    {
+      "order": 2,
+      "speaker": "2B2zENPfFH",
+      "text": "So, there were these two guys talking about how they plan to start a 'cat yoga' class."
+    },
+    {
+      "order": 3,
+      "speaker": "tscFH7rvti",
+      "text": "Cat yoga? That's a new one. How does that even work?"
+    },
+    {
+      "type": "selectOption",
+      "question": "Why might commuters find talks amusing?",
+      "answers": [
+        {
+          "text": "Expensive",
+          "isCorrect": false
+        },
+        {
+          "text": "Unexpected",
+          "isCorrect": true
+        },
+        {
+          "text": "Frequent",
+          "isCorrect": false
+        }
+      ],
+      "order": 3
+    },
+    {
+      "order": 4,
+      "speaker": "2B2zENPfFH",
+      "text": "Apparently, they think cats are natural yogis and can teach humans a thing or two about flexibility."
+    },
+    {
+      "order": 5,
+      "speaker": "tscFH7rvti",
+      "text": "I can just imagine a cat stretching and everyone trying to mimic it. That's hilarious!"
+    },
+    {
+      "order": 6,
+      "speaker": "2B2zENPfFH",
+      "text": "Right? And then one of them said they were going to market it as 'purr-fect relaxation'."
+    },
+    {
+      "order": 7,
+      "speaker": "tscFH7rvti",
+      "text": "That's so punny! I bet it would actually attract a lot of people."
+    },
+    {
+      "order": 8,
+      "speaker": "2B2zENPfFH",
+      "text": "Yeah, and then there was this other conversation about someone who collects vintage toasters."
+    },
+    {
+      "order": 9,
+      "speaker": "tscFH7rvti",
+      "text": "Vintage toasters? That's oddly specific. What do they do with them?"
+    },
+    {
+      "order": 10,
+      "speaker": "2B2zENPfFH",
+      "text": "They said they like to restore them and display them in their kitchen as art pieces."
+    },
+    {
+      "order": 11,
+      "speaker": "tscFH7rvti",
+      "text": "I guess everyone has their own unique hobby. Toasters as art, who would've thought?"
+    },
+    {
+      "order": 12,
+      "speaker": "2B2zENPfFH",
+      "text": "Exactly! It just goes to show you never know what you'll hear on public transport."
+    },
+    {
+      "order": 13,
+      "speaker": "tscFH7rvti",
+      "text": "True. It's like a daily dose of entertainment, free of charge."
+    },
+    {
+      "order": 14,
+      "speaker": "2B2zENPfFH",
+      "text": "Definitely! Makes the commute a bit more interesting, that's for sure."
+    },
+    {
+      "type": "selectOption",
+      "question": "What did the guys plan to start?",
+      "answers": [
+        {
+          "text": "Dog yoga",
+          "isCorrect": false
+        },
+        {
+          "text": "Cat yoga",
+          "isCorrect": true
+        },
+        {
+          "text": "Cat cafe",
+          "isCorrect": false
+        }
+      ],
+      "order": 5
+    }
+  ],
+  "image": {
+    "type": "emoji",
+    "data": "🗣️"
+  }
+}
