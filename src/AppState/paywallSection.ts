@@ -35,6 +35,10 @@ export async function getPaywallSection(params: any): Promise<any> {
         }
     }
 
+    if (items.length === 0) {
+        return null;
+    }
+
     return {
         id: "4",
         title: i18n.__("AppState_Paywall_Title"),

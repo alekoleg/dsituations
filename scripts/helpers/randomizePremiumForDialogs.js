@@ -23,12 +23,14 @@ async function fetchDialogs() {
     const Dialog = Parse.Object.extend('Dialog');
     const query = new Parse.Query(Dialog);
     query.limit(1000);  // Установка лимита в 5000
+    query.equalTo("is_premium", true);
 
     try {
         const results = await query.find({ useMasterKey: true });
 
         for (const dialog of results) {
-           dialog.set("is_premium", Math.random() < 0.5);
+        //    dialog.set("is_premium", Math.random() < 0.5);
+            dialog.set("is_premium", false);
            await dialog.save();
         }
 
