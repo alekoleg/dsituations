@@ -1,4 +1,5 @@
 import { ImageType } from "../Common/ImageTypes";
+import { SituationPreview, SituationPreviewModel } from "./SituationPreview";
 
 export interface Dialog {
     id: string;
@@ -11,6 +12,7 @@ export interface Dialog {
     is_learnt: boolean;
     is_premium: boolean;
     lines: any[];
+    situation: SituationPreview | null;
 }
 
 export class DialogModel implements Dialog {
@@ -22,8 +24,9 @@ export class DialogModel implements Dialog {
         data: string;
     };
     is_learnt: boolean;
-   is_premium: boolean;
+    is_premium: boolean;
     lines: any[];
+    situation: SituationPreview | null;
 
     constructor(data: Dialog) {
         this.id = data.id;
@@ -33,9 +36,15 @@ export class DialogModel implements Dialog {
         this.is_learnt = data.is_learnt;
         this.is_premium = data.is_premium;
         this.lines = data.lines;
+        this.situation = data.situation;
     }
 
     static async fromParse(dialog: Parse.Object): Promise<DialogModel> {
+        let situation = null;
+        if (dialog.get('situation')) {
+            situation = await SituationPreviewModel.fromParse(dialog.get('situation'));
+        }
+
         return new DialogModel({
             id: dialog.id,
             title: dialog.get('title'),
@@ -46,7 +55,8 @@ export class DialogModel implements Dialog {
             },
             is_learnt: dialog.get('is_learnt') ?? false,
             is_premium: dialog.get('is_premium') ?? false,
-            lines: []
+            lines: [],
+            situation: situation
         });
     }
     
@@ -58,7 +68,8 @@ export class DialogModel implements Dialog {
             image: this.image,
             is_learnt: this.is_learnt,
             is_premium: this.is_premium,
-            lines: this.lines
+            lines: this.lines,
+            situation: this.situation
         };
     }
 }

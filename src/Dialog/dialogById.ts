@@ -20,6 +20,7 @@ Parse.Cloud.define('dialogById', async (req: any) => {
     }
 
     let query = new Parse.Query('Dialog');
+    query.include("situation");
     let dialog = await query.get(dialogId);
 
     let dialogModel = await DialogModel.fromParse(dialog);
