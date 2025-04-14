@@ -37,6 +37,7 @@ const AudioVersionId = 'v21012025.2';
 async function start() {
 
     // find not hidden dialogs
+    console.log('start');
     const Dialog = Parse.Object.extend('Dialog');
     const queryDialog = new Parse.Query(Dialog);
     queryDialog.notEqualTo('hidden', true);
@@ -50,7 +51,7 @@ async function start() {
     // get speeches relation from dialogs
     for (let i = 0; i < dialogs.length; i++) {
         const dialog = dialogs[i];
-        const speechesQuery = dialog.relation('dialog_b1').query();
+        const speechesQuery = dialog.relation('dialog_c1').query();
         speechesQuery.notEqualTo("audio_version", AudioVersionId);
         const results = await speechesQuery.find();
         console.log('Found', results.length, 'speeches for dialog', dialog.id);
