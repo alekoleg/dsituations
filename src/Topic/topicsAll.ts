@@ -40,7 +40,7 @@ Parse.Cloud.define('topicsAll', async (req: any) => {
             },
             name: topic.get('title'),
             situations_previews: situations_previews.map(situation => situation.toJSON()),
-            has_more: results.length > previewCount
+            has_more: results.length > 4
         });
     }
  
