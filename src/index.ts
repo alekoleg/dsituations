@@ -5,6 +5,19 @@ import * as i18n from 'i18n';
 
 var ParseServer = require('parse-server').ParseServer;
 
+// Supported languages configuration
+const SUPPORTED_LANGUAGES = ['en', 'ru'];
+type SupportedLanguage = typeof SUPPORTED_LANGUAGES[number];
+
+// Middleware to handle language from Parse SDK calls
+const handleLanguage = (req: Request, res: Response, next: Function) => {
+    // Check if language is provided in the request
+    const language = (req.headers['x-parse-language'] as string) || (req.query.language as string);
+    if (language && SUPPORTED_LANGUAGES.includes(language as SupportedLanguage)) {
+        i18n.setLocale(language);
+    }
+    next();
+};
 
 async function setup()  {
 
@@ -47,14 +60,17 @@ async function setup()  {
     });
 
     i18n.configure({
-        locales: ['en'],
+        locales: SUPPORTED_LANGUAGES,
         directory: __dirname + '/../locales',
-        defaultLocale: 'en'
+        defaultLocale: 'en',
+        updateFiles: false,
+        syncFiles: false
     });
     await server.start();
 
     // Serve the Parse API on the /parse URL prefix
     app.use(i18n.init);
+    app.use(handleLanguage);  // Add language handling middleware
     app.use('/static', express.static(__dirname + '/public/'));
     app.use('/api/parse', server.app);
 
