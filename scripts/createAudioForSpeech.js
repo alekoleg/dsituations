@@ -32,9 +32,9 @@ const elevenlabsSpeacker2Female = 'cgSgspJ2msm6clMCkdW9';
 const elevenlabsSpeacker2Male = 'iP95p4xoKVk53GoZ742B';
 const elevenlabsUrl = 'https://api.elevenlabs.io/v1/text-to-speech/';
 
-const AudioVersionId = 'v21012025.2';
+const AudioVersionId = 'v09052025.1';
 
-async function start() {
+async function startWithDialogs() {
 
     // find not hidden dialogs
     console.log('start');
@@ -95,10 +95,83 @@ async function start() {
     console.log('characterCounter:', characterCounter);
 }
 
+function startWithSpeeches() {
+    console.log('Starting with speeches from missing_audio_files.json');
+    
+    // Read the missing_audio_files.json file
+    const missingAudioData = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../missing_audio_files.json'), 'utf8'));
+    console.log(`Found ${missingAudioData.length} speeches missing audio files`);
+    
+    // Process each speech
+    processSpeechBatch(missingAudioData, 0);
+}
+
+async function processSpeechBatch(speeches, startIndex, batchSize = 5) {
+    if (startIndex >= speeches.length) {
+        console.log('All speeches processed successfully!');
+        return;
+    }
+    
+    const endIndex = Math.min(startIndex + batchSize, speeches.length);
+    console.log(`Processing speeches ${startIndex + 1} to ${endIndex} of ${speeches.length}`);
+    
+    const Speech = Parse.Object.extend('Speech');
+    
+    for (let i = startIndex; i < endIndex; i++) {
+        const speechData = speeches[i];
+        console.log(`Processing speech ${i + 1}/${speeches.length}: ${speechData.speechId} - "${speechData.text.substring(0, 30)}..."`);
+        
+        try {
+            // Fetch the speech from Parse
+            const query = new Parse.Query(Speech);
+            query.include('speaker');
+            query.equalTo("objectId", speechData.speechId);
+            const speech = await query.first();
+            
+            if (!speech) {
+                console.log(`Speech not found: ${speechData.speechId}`);
+                continue;
+            }
+            
+            // Get speaker information
+            const speaker = speech.get('speaker');
+            
+            // Determine voice ID based on speaker
+            let voiceId;
+            const sex = speaker.get('sex');
+            
+            // Main character
+            if (speaker.id === '2B2zENPfFH') {
+                voiceId = elevenlabsSpeacker1;
+            } else if (sex === 'female') {
+                voiceId = elevenlabsSpeacker2Female;
+            } else {
+                voiceId = elevenlabsSpeacker2Male;
+            }
+            
+            // Generate audio
+            await generateElevenLabsAudio(speech.get('text'), speech.id, voiceId);
+            
+            // Update audio version
+            speech.set('audio_version', AudioVersionId);
+            await speech.save();
+            
+            console.log(`Successfully processed speech: ${speechData.speechId}`);
+        } catch (error) {
+            console.error(`Error processing speech ${speechData.speechId}:`, error.message);
+        }
+    }
+    
+    // Process next batch
+    setTimeout(() => {
+        processSpeechBatch(speeches, endIndex, batchSize);
+    }, 10000); // Small delay between batches to avoid overwhelming the API
+}
+
 async function generateElevenLabsAudio(text, filename, voice_id) {
     console.log('generateElevenLabsAudio text:', text);
 
-    const directory = path.join(os.tmpdir(), `d_situations`);
+    const directory = path.join(os.tmpdir(), `d_situations_2`);
     if (!fs.existsSync(directory)) {
         fs.mkdirSync(directory, { recursive: true });
     }
@@ -182,6 +255,6 @@ async function synthesizeWithTimestamps(text, filePath, voice_id) {
     }
 }
 
-
-
-start()
+// Update to call both functions or choose which one to run
+startWithSpeeches();
+// startWithDialogs();
