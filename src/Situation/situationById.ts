@@ -1,9 +1,10 @@
 import * as parse from 'parse/node';
 import { SituationPreviewModel } from '../Models/SituationPreview';
 import { DialogModel } from '../Models/Dialog';
+import { setupCorrectLocale } from '../languageUtils';
 
 Parse.Cloud.define('situationById', async (req: any) => {
-
+    setupCorrectLocale(req);
     const situationId = req.params.id;
     if (!situationId) {
         throw new Error('Situation ID is required');

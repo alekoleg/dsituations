@@ -2,9 +2,10 @@ import * as parse from 'parse/node';
 import { ImageType } from '../Common/ImageTypes';
 import { SituationPreviewModel } from '../Models/SituationPreview';
 import { TopicModel } from '../Models/Topic';
+import { setupCorrectLocale } from '../languageUtils';
 
 Parse.Cloud.define('topicById', async (req: any) => {
-
+    setupCorrectLocale(req);
     const topicId = req.params.id;
     if (!topicId) {
         throw new Error('Topic ID is required');

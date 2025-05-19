@@ -1,8 +1,9 @@
 import * as parse from 'parse/node';
 import { ImageType } from '../Common/ImageTypes';
-
+import { setupCorrectLocale } from '../languageUtils';
 
 Parse.Cloud.define('dialogByIdWithSectionPreview', async (req: any) => {
+    setupCorrectLocale(req);
     const dialogId = req.params.id;
     if (!dialogId) {
         throw new Error('Dialog ID is required');

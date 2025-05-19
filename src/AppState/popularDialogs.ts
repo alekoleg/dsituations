@@ -2,7 +2,7 @@ import * as i18n from 'i18n';
 import { SectionType } from '../Common/SectionTypes';
 import { ImageType } from '../Common/ImageTypes';
 
-export async function getPopularDialogs(params: any): Promise<any> {
+export async function getPopularDialogs(req: any, params: any): Promise<any> {
 
     let query = new Parse.Query('dialog_ratings');
     query.include('dialog');
@@ -48,7 +48,7 @@ export async function getPopularDialogs(params: any): Promise<any> {
     
     return {
         id: "1",
-        title: i18n.__("AppState_Popular_Dialogs"),
+        title: req.__("AppState_Popular_Dialogs"),
         button: null,
         section_type: {
             type: SectionType.DIALOG_WITH_SECTION_PREVIEWS,

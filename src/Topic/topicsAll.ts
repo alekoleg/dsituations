@@ -1,9 +1,10 @@
 import * as parse from 'parse/node';
 import { ImageType } from '../Common/ImageTypes';
 import { SituationPreviewModel } from '../Models/SituationPreview';
+import { setupCorrectLocale } from '../languageUtils';
 
 Parse.Cloud.define('topicsAll', async (req: any) => {
-
+    setupCorrectLocale(req);
     const offset = req.params.offset ?? 0;
     const pageSize = 20;
     

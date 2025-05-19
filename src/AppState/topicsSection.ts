@@ -3,7 +3,7 @@ import { ActionType } from '../Common/ActionTypes';
 import { SectionType } from '../Common/SectionTypes';
 import { ImageType } from '../Common/ImageTypes';
 
-export async function getAllTopics(params: any): Promise<any> {
+export async function getAllTopics(req: any, params: any): Promise<any> {
 
     let query = new Parse.Query('Topic');
     query.ascending('order');
@@ -26,7 +26,7 @@ export async function getAllTopics(params: any): Promise<any> {
  
     return {
         id: "9",
-        title: i18n.__("AppState_All_Topics"),
+        title: req.__("AppState_All_Topics"),
         section_type: {
             type: SectionType.TOPIC_PREVIEWS,
             items: items

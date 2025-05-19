@@ -1,10 +1,9 @@
-import * as i18n from 'i18n';
 import { ActionType } from '../Common/ActionTypes';
 import { SectionType } from '../Common/SectionTypes';
 import { ImageType } from '../Common/ImageTypes';
 import { SituationPreviewModel } from '../Models/SituationPreview';
 
-export async function getPopularSituation(params: any): Promise<any> {
+export async function getPopularSituation(req: any, params: any): Promise<any> {
 
     let query = new Parse.Query('Situation');
     query.limit(5);
@@ -16,11 +15,14 @@ export async function getPopularSituation(params: any): Promise<any> {
         situations.map(situation => SituationPreviewModel.fromParse(situation))
     );
  
+
+    console.log('title');
+    console.log(req.__("AppState_Popular_Situations"));
     return {
         id: "0",
-        title: i18n.__("AppState_Popular_Situations"),
+        title: req.__("AppState_Popular_Situations"),
         button: {
-            title: i18n.__("AppState_Button_Title_Show_All"),
+            title: req.__("AppState_Button_Title_Show_All"),
             action_type: ActionType.SHOW_POPULAR_SITUATIONS
         },
         section_type: {

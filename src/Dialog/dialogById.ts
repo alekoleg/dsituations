@@ -7,9 +7,11 @@ import { ImageType } from '../Common/ImageTypes';
 import { AudioType } from '../Common/AudioType';
 import { LineType } from '../Common/LineTypes';
 import { InteractiveElementModel } from '../Models/InteractiveElement';
+import { setupCorrectLocale } from '../languageUtils';
 
 Parse.Cloud.define('dialogById', async (req: any) => {
-
+    setupCorrectLocale(req);
+    
     const version = req.params.version;
     const dialogId = req.params.id;
     const knowledgeLevel = parseKnowledgeLevel(req.params.level) ?? KnowledgeLevel.B;

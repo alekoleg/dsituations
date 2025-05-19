@@ -1,7 +1,8 @@
+import { setupCorrectLocale } from '../languageUtils';
 import { SituationPreviewModel } from '../Models/SituationPreview';
 
-Parse.Cloud.define('situationGetPopulars', async (params: any): Promise<any> => {
-
+Parse.Cloud.define('situationGetPopulars', async (req: any): Promise<any> => {
+    setupCorrectLocale(req);
     let query = new Parse.Query('Situation');
     query.limit(25);
     query.notEqualTo('hidden', true);

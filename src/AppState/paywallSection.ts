@@ -2,7 +2,7 @@ import * as i18n from 'i18n';
 import { SectionType } from '../Common/SectionTypes';
 import { ImageType } from '../Common/ImageTypes';
 
-export async function getPaywallSection(params: any): Promise<any> {
+export async function getPaywallSection(req: any, params: any): Promise<any> {
     // Получаем ситуации
     let situationQuery = new Parse.Query('Situation');
     situationQuery.limit(3);
@@ -41,7 +41,7 @@ export async function getPaywallSection(params: any): Promise<any> {
 
     return {
         id: "4",
-        title: i18n.__("AppState_Paywall_Title"),
+        title: req.__("AppState_Paywall_Title"),
         button: null,
         section_type: {
             type: SectionType.PAYWALL_DIALOG_PREVIEW,
@@ -51,11 +51,11 @@ export async function getPaywallSection(params: any): Promise<any> {
                     type: ImageType.URL,
                     data: "https://dialogs.fra1.cdn.digitaloceanspaces.com/images/paywallStar.png"
                 },
-                title: i18n.__("AppState_Paywall_Dialogs_Previews_Title"),
-                subtitle: i18n.__("AppState_Paywall_Dialogs_Previews_Subtitle"),
-                button_title: i18n.__("AppState_Paywall_Dialogs_Previews_Button_Title"),
+                title: req.__("AppState_Paywall_Dialogs_Previews_Title"),
+                subtitle: req.__("AppState_Paywall_Dialogs_Previews_Subtitle"),
+                button_title: req.__("AppState_Paywall_Dialogs_Previews_Button_Title"),
                 dialogs_previews: items,
-                total_paid_dialogs: i18n.__("AppState_Paywall_Dialogs_Previews_Total_Paid_Dialogs").replace("%s", "330")
+                total_paid_dialogs: req.__("AppState_Paywall_Dialogs_Previews_Total_Paid_Dialogs").replace("%s", "330")
             }
         }
     }

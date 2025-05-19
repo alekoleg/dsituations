@@ -2,7 +2,7 @@ import * as i18n from 'i18n';
 import { SectionType } from '../Common/SectionTypes';
 import { ImageType } from '../Common/ImageTypes';
 
-export async function getNewDialogs(params: any): Promise<any> {
+export async function getNewDialogs(req: any, params: any): Promise<any> {
 
     let query = new Parse.Query('Dialog');
     query.limit(5);
@@ -30,7 +30,7 @@ export async function getNewDialogs(params: any): Promise<any> {
 
     return {
         id: "3",
-        title: i18n.__("AppState_New_Dialogs"),
+        title: req.__("AppState_New_Dialogs"),
         button: null,
         section_type: {
             type: SectionType.DIALOG_WITH_SECTION_PREVIEWS,

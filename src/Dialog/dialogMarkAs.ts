@@ -1,6 +1,8 @@
 import { DialogEventType } from "../Common/DialogTypes";
+import { setupCorrectLocale } from '../languageUtils';
 
 Parse.Cloud.define('dialogMarkAs', async (req: any) => {
+    setupCorrectLocale(req);
 
     let dialogId = req.params.dialogId;
     let event = req.params.event;

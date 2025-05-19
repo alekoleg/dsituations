@@ -1,18 +1,19 @@
 import * as parse from 'parse/node';
-
 import { getPopularSituation } from './popularSituation';
 import { getNewDialogs } from './newDialogs';
 import { getAllTopics } from './topicsSection';
 import { getPopularDialogs } from './popularDialogs';
 import { getPaywallSection } from './paywallSection';
+import { setupCorrectLocale } from '../languageUtils';
 
 Parse.Cloud.define('appState', async (req: any) => {
+    setupCorrectLocale(req);
 
-    let popularSituation = await getPopularSituation(req.params);
-    let newDialogs = await getNewDialogs(req.params);
-    let popularDialogs = await getPopularDialogs(req.params);
-    let topics = await getAllTopics(req.params);
-    let paywall = await getPaywallSection(req.params);
+    let popularSituation = await getPopularSituation(req, req.params);
+    let newDialogs = await getNewDialogs(req, req.params);
+    let popularDialogs = await getPopularDialogs(req, req.params);
+    let topics = await getAllTopics(req, req.params);
+    let paywall = await getPaywallSection(req, req.params);
     
     let state = {
         "home_sections": [
