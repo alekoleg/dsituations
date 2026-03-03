@@ -9,12 +9,7 @@ async function setup()  {
 
     dotenv.config();
     const app = express();
-    const MONGO_DB = process.env.MONGO_DB;
-    const MONGO_USERNAME = process.env.MONGO_USERNAME;
-    const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
-
-    // test
-    const DB_HOST = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@dbaas-db-3578739-4bb2362b.mongo.ondigitalocean.com/${MONGO_DB}?tls=true&authSource=admin&replicaSet=dbaas-db-3578739`
+    const DB_HOST = process.env.MONGODB_URI;
     const SERVER_URL = process.env.SERVER_URL;
 
     // Specify the connection string for your mongodb database
